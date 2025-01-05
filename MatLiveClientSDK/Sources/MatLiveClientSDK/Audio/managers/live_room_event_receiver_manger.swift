@@ -12,7 +12,7 @@ internal import LiveKit
 
 
 public class LiveRoomEventReceiverManager: ObservableObject {
-    public static let shared = LiveRoomEventReceiverManager()
+    nonisolated(unsafe) public static let shared = LiveRoomEventReceiverManager()
     var seatService: RoomSeatService?
     @Published public var messages: [MatLiveChatMessage] = [] // Observing messages list
     @Published public var inviteRequests: [MatLiveRequestTackMic] = [] // Observing messages list
