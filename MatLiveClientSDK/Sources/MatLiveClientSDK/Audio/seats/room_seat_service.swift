@@ -252,12 +252,14 @@ public class RoomSeatService: ObservableObject {
     }
     
     // Remove user from seat
-    func removeUserFromSeat(_ seatIndex: Int) async {
-        guard seatIndex != -1, seatIndex <= maxIndex else { return }
+    func removeUserFromSeat(_ seatIndex: Int) async -> String?  {
+        guard seatIndex != -1, seatIndex <= maxIndex else { return nil }
         let seat = seatList[seatIndex]
-        guard seat.currentUser != nil else { return }
+        guard seat.currentUser != nil else { return nil}
+        let userId = seat.currentUser?.userId
         seat.currentUser = nil
         await UpdateRoomMetaData()
+        return userId
     }
     
     private func leaveSeatIfHave()async{

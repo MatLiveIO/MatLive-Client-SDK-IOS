@@ -30,12 +30,13 @@ private protocol LiveRoomDelegate:RoomDelegate{
 }
 
 public class MatLiveRoomManager: ObservableObject {
-    nonisolated(unsafe) public static let shared = MatLiveRoomManager()
+    public static let shared = MatLiveRoomManager()
     @Published public var participantTracks: [ParticipantTrack] = []
     @Published var room: Room?
     @Published public var seatService: RoomSeatService?
     @Published public var matLiveJoinRoomManager = MatLiveJoinRoomManager.shared
     
+    var onMic :Bool = false
     var isSetup: Bool = false
     var flagStartedReplayKit: Bool = false
     var onInvitedToMic:((Int)->Void)?
@@ -62,6 +63,7 @@ public class MatLiveRoomManager: ObservableObject {
 
     public func takeSeat(seatIndex: Int) async throws {
         try await askPublish(enable: true)
+        onMic = true
         await seatService?.takeSeat(
             seatIndex: seatIndex,
             user: matLiveJoinRoomManager.currentUser!
@@ -78,6 +80,7 @@ public class MatLiveRoomManager: ObservableObject {
 
     public  func leaveSeat(seatIndex: Int) async throws {
         try await askPublish(enable: false)
+        onMic = false
         await seatService?.leaveSeat(
             seatIndex,
             matLiveJoinRoomManager.currentUser!.userId
@@ -104,7 +107,7 @@ public class MatLiveRoomManager: ObservableObject {
     }
 
     public func removeUserFromSeat(seatIndex: Int) async throws {
-        await seatService?.removeUserFromSeat(seatIndex)
+        let _ = await seatService?.removeUserFromSeat(seatIndex)
     }
 
     public func switchSeat(toSeatIndex: Int) async throws {
@@ -209,7 +212,9 @@ extension MatLiveRoomManager:LiveRoomDelegate{
             guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
                 return
             }
-            LiveRoomEventReceiverManager.shared.receivedData(data: jsonObject, onInvitedToMic: onInvitedToMic, onSendGift: onSendGift)
+            Task{
+                await  LiveRoomEventReceiverManager.shared.receivedData(data: jsonObject, onInvitedToMic: onInvitedToMic, onSendGift: onSendGift)
+            }
         } catch {
             print("Error in decode data \(error.localizedDescription) ")
         }

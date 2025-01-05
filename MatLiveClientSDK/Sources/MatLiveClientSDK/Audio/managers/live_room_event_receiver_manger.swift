@@ -17,13 +17,14 @@ public class LiveRoomEventReceiverManager: ObservableObject {
     @Published public var messages: [MatLiveChatMessage] = [] // Observing messages list
     @Published public var inviteRequests: [MatLiveRequestTackMic] = [] // Observing messages list
     @Published public var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
+    @Published public var matliveRoomManager = MatLiveRoomManager.shared
     private init(){}
     
 
     public nonisolated func receivedData(data: [String: Any],
                       onInvitedToMic: ((Int) -> Void)?,
                       onSendGift: ((String) -> Void)?
-    ){
+    )async {
         guard let event = data["event"] as? Int else { return }
         guard let user = data["user"] as? [String: Any] else { return }
         
@@ -43,8 +44,18 @@ public class LiveRoomEventReceiverManager: ObservableObject {
                 }
             }
             
+        case MatLiveEvents.removeUserFromSeat:
+            guard data["userId"] as? String == matliveJoinRoomManager.currentUser?.userId else{return}
+            try? await matliveJoinRoomManager.audioTrack?.stop()
+            do{
+                try await matliveRoomManager.room?.localParticipant.setMicrophone(enabled: false)
+            } catch{
+                print(error.localizedDescription)
+            }
+            matliveRoomManager.onMic = false
+            
         case MatLiveEvents.clearChat:
-            self.messages.removeAll()
+            self.messages = []
             
         case MatLiveEvents.inviteUserToTakeMic:
             guard let userid = data["userId"] as? String else{return}
