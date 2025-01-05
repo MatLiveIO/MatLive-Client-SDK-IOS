@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		390AA1DC2D2AB8D900CE29CA /* MatLiveClientSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 390AA1DB2D2AB8D900CE29CA /* MatLiveClientSDK */; };
+		390AA1DF2D2ABB3A00CE29CA /* MatLiveClientSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 390AA1DE2D2ABB3A00CE29CA /* MatLiveClientSDK */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				390AA1DC2D2AB8D900CE29CA /* MatLiveClientSDK in Frameworks */,
+				390AA1DF2D2ABB3A00CE29CA /* MatLiveClientSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = MatLiveExample;
 			packageProductDependencies = (
-				390AA1DB2D2AB8D900CE29CA /* MatLiveClientSDK */,
+				390AA1DE2D2ABB3A00CE29CA /* MatLiveClientSDK */,
 			);
 			productName = MatLiveExample;
 			productReference = 390AA1B72D2AB2D700CE29CA /* MatLiveExample.app */;
@@ -101,7 +101,6 @@
 			mainGroup = 390AA1AE2D2AB2D700CE29CA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				390AA1DA2D2AB8D900CE29CA /* XCLocalSwiftPackageReference "../../../../../MatLiveClientSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 390AA1B82D2AB2D700CE29CA /* Products */;
@@ -269,6 +268,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -298,6 +298,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -334,15 +335,8 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		390AA1DA2D2AB8D900CE29CA /* XCLocalSwiftPackageReference "../../../../../MatLiveClientSDK" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../../../MatLiveClientSDK;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		390AA1DB2D2AB8D900CE29CA /* MatLiveClientSDK */ = {
+		390AA1DE2D2ABB3A00CE29CA /* MatLiveClientSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MatLiveClientSDK;
 		};
