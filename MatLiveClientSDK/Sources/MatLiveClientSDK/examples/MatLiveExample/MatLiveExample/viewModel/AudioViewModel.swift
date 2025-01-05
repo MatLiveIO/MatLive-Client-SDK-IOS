@@ -17,13 +17,29 @@ class AudioRoomViewModel: ObservableObject {
     @Published var showError: Bool = false
     @Published var showSheet: Bool = false
     @Published var snackBarMessage: String = ""
-    @Published var selectedUser: MatLiveUser?
+    @Published var selectedSeat: MatLiveRoomAudioSeat?
     @Published var selectedGlobalIndex: Int?
     @Published var matliveRoomManager = MatLiveRoomManager.shared
     @Published var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
     @Published var textMessage = ""
     
-    func initializeRoom(roomId: String, token: String) async {
+    let id = Int.random(in: 0..<10)
+
+    let images = [
+      "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ718nztPNJfCbDJjZG8fOkejBnBAeQw5eAUA&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQll3t93lH9yx9shW9OMmDw5ft8sYdTs7bHcZZFyACGnKwdnWwPU7JW3KT2oAB0jEQSJiU&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUXxSDbIbLLYxjHI9ht0lLf0VMmioBijVmoJeoItlMoUmfuu_AG3Or3K5kSx3YHbUBt3Q&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1Dw7-4lVfRq74_YEiPEt4e-bQ0_6UA2y73Q&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-C_UAhXq9GfuGO452EEzfbKnh1viQB9EDBQ&s",
+      "https://www.shutterstock.com/shutterstock/photos/2137527991/display_1500/stock-photo-portrait-of-smiling-mature-man-standing-on-white-background-2137527991.jpg",
+      "https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSplJ-5PtH61bgDfJtFiSWZtSOTjN_cyxamkg&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqPRe6_8SSJ591Lt4jckiMaLvfvnjP2Z_oIQ&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG7CH2bTx8kyDAU6Zc6rR0fX2X_4NGiANCTw&s",
+    ];
+    
+    func initializeRoom(roomId: String, token: String, userName:String) async {
     
         await matliveJoinRoomManager.initialize(onInvitedToMic: { seatIndex in
             
@@ -33,11 +49,11 @@ class AudioRoomViewModel: ObservableObject {
         do {
             try await matliveJoinRoomManager.connect(
                 token: token,
-                name: "Anas Amer",
-                avatar: "https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109?s=200",
-                userId: "10",
+                name:userName,
+                avatar: images[id],
+                userId: "\(id)",
                 roomId: roomId,
-                metadata: "{'userRole':admin}")
+                metadata: "")
             
             let seatService = matliveRoomManager.seatService
             await seatService?.initWithConfig(config:
@@ -142,10 +158,10 @@ class AudioRoomViewModel: ObservableObject {
         return (0..<rowIndex).reduce(0) { $0 + (layoutConfig.rowConfigs[$1].count) } + seatIndex
     }
 
-    func showSeatActions(globalIndex: Int, user: MatLiveUser?) {
+    func showSeatActions(globalIndex: Int, seat: MatLiveRoomAudioSeat) {
         withAnimation {
             selectedGlobalIndex = globalIndex
-            selectedUser = user
+            selectedSeat = seat 
             showSheet = true
         }
     }

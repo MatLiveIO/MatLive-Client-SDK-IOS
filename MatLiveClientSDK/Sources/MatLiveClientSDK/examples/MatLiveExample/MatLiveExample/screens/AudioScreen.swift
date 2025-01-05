@@ -11,13 +11,14 @@ import Combine
 struct AudioScreen: View {
     let roomId: String
     let token: String
-
+    let userName:String
     @StateObject private var viewModel = AudioRoomViewModel()
    
 
-    init(roomId: String, token: String) {
+    init(roomId: String, token: String,userName:String) {
         self.roomId = roomId
         self.token = token
+        self.userName = userName
     }
     var body: some View {
         NavigationView {
@@ -29,8 +30,8 @@ struct AudioScreen: View {
                     VStack(spacing: 16) {
                         // Audio Room Layout
                       
-                        AudioRoomLayoutWidget { index, user in
-                            viewModel.selectedUser = user
+                        AudioRoomLayoutWidget { index, seat in
+                            viewModel.selectedSeat = seat
                             viewModel.selectedGlobalIndex = index
                             viewModel.showSheet = true
                         }
@@ -65,7 +66,7 @@ struct AudioScreen: View {
             .sheet(isPresented: $viewModel.showSheet) {
                 if let index = viewModel.selectedGlobalIndex {
                     SeatActionBottomSheet(
-                        user: viewModel.selectedUser,
+                        seat: viewModel.selectedSeat!,
                         onTakeMic: { await viewModel.handleTakeMic(index: index) },
                         onMuteMic: { await viewModel.handleMuteMic(index: index) },
                         onRemoveSpeaker: { await viewModel.handleRemoveSpeaker(index: index) },
@@ -88,14 +89,14 @@ struct AudioScreen: View {
                 }
             })
             .task {
-                await  viewModel.initializeRoom(roomId: roomId, token: token)
+                await  viewModel.initializeRoom(roomId: roomId, token: token,userName: userName)
             }
         }
     }
 }
 
 #Preview {
-    AudioScreen(roomId: "", token: "")
+    AudioScreen(roomId: "", token: "",userName: "")
         .environmentObject(Coordinator())
 }
 

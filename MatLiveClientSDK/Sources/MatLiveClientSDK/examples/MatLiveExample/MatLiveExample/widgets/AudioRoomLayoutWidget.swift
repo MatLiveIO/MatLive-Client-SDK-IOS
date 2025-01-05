@@ -10,7 +10,7 @@ import Combine
 struct AudioRoomLayoutWidget: View {
     @ObservedObject private var audioVM = AudioRoomViewModel()
 
-    let onSeatTap: ((Int, MatLiveUser?) -> Void)
+    let onSeatTap: ((Int, MatLiveRoomAudioSeat?) -> Void)
 
     var body: some View {
         if let layoutConfig = audioVM.matliveRoomManager.seatService!.layoutConfig {
@@ -23,7 +23,7 @@ struct AudioRoomLayoutWidget: View {
                             let seat = audioVM.matliveRoomManager.seatService!.seatList[globalIndex]
                                 SeatWidget(
                                     seat: seat,
-                                    onTap: { onSeatTap(globalIndex, seat.currentUser) }
+                                    onTap: { onSeatTap(globalIndex, seat) }
                                 )
                         }
                     }

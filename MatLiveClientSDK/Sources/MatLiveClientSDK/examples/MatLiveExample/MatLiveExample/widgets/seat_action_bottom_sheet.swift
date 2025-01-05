@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct SeatActionBottomSheet: View {
-    var user: MatLiveUser?
+    var seat: MatLiveRoomAudioSeat
     var onTakeMic: (() async -> Void)?
     var onMuteMic: (() async -> Void)?
     var onRemoveSpeaker: (() async -> Void)?
@@ -20,8 +20,8 @@ struct SeatActionBottomSheet: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            if let user = user {
-                UserSpecificActions(user: user)
+            if seat.currentUser == nil {
+                UserSpecificActions(seat: seat)
             } else {
                 GeneralActions()
             }
@@ -29,67 +29,81 @@ struct SeatActionBottomSheet: View {
     }
 
     @ViewBuilder
-    private func UserSpecificActions(user: MatLiveUser) -> some View {
+    private func UserSpecificActions(seat: MatLiveRoomAudioSeat) -> some View {
         List{
-            if user.isMicOn {
+            
+            if !MatLiveRoomManager.shared.onMic , seat.isLocked{
                 ActionButton(
-                    icon: "mic.slash.fill",
-                    label: "Mute Mic",
-                    action: { await onMuteMic?() }
+                    icon: "mic.fill",
+                    label: "Take Mic",
+                    action: { await onTakeMic?() }
+                )
+            }
+            if MatLiveRoomManager.shared.onMic , seat.isLocked{
+                ActionButton(
+                    icon: "arrow.triangle.branch",
+                    label: "Switch Mic",
+                    isDestructive: true,
+                    action: { await onSwitch?() }
+                )
+            }
+            
+            if !seat.isLocked {
+                ActionButton(
+                    icon: "lock.fill",
+                    label: "Lock Mic",
+                    isDestructive: true,
+                    action: { await onLockMic?() }
                 )
             } else {
                 ActionButton(
-                    icon: "mic.fill",
-                    label: "Unmute Mic",
-                    action: { await onMuteMic?() }
+                    icon: "lock.open.fill",
+                    label: "Unlock Mic",
+                    isDestructive: true,
+                    action: { await onUnLockMic?() }
                 )
             }
-
-            ActionButton(
-                icon: "person.crop.circle.badge.minus",
-                label: "Remove Speaker",
-                isDestructive: true,
-                action: { await onRemoveSpeaker?() }
-            )
-
-            ActionButton(
-                icon: "arrow.uturn.left",
-                label: "Leave Mic",
-                isDestructive: true,
-                action: { await onLeaveMic?() }
-            )
         }
     }
 
     @ViewBuilder
     private func GeneralActions() -> some View {
-        List{
-            ActionButton(
-                icon: "mic.fill",
-                label: "Take Mic",
-                action: { await onTakeMic?() }
-            )
+        if seat.currentUser?.userId == MatLiveJoinRoomManager.shared.currentUser?.userId{
+            List{
+                if seat.currentUser!.isMicOn{
+                    ActionButton(
+                        icon: "mic.slash.fill",
+                        label: "Mute Mic",
+                        action: { await onMuteMic?() }
+                    )
+                }else{
+                    ActionButton(
+                        icon: "mic.slash.fill",
+                        label: "unMute Mic",
+                        action: { await onMuteMic?() }
+                    )
+                }
+                if seat.currentUser != nil , seat.currentUser?.userId == MatLiveJoinRoomManager.shared.currentUser?.userId{
+                    ActionButton(
+                        icon: "person.crop.circle.badge.minus",
+                        label: "Remove Speaker",
+                        isDestructive: true,
+                        action: { await onRemoveSpeaker?() }
+                    )
 
-            ActionButton(
-                icon: "arrow.triangle.branch",
-                label: "Switch Mic",
-                isDestructive: true,
-                action: { await onSwitch?() }
-            )
-
-            ActionButton(
-                icon: "lock.fill",
-                label: "Lock Mic",
-                isDestructive: true,
-                action: { await onLockMic?() }
-            )
-
-            ActionButton(
-                icon: "lock.open.fill",
-                label: "Unlock Mic",
-                isDestructive: true,
-                action: { await onUnLockMic?() }
-            )
+                  
+                }
+                
+                if seat.currentUser?.userId == MatLiveJoinRoomManager.shared.currentUser?.userId{
+                    ActionButton(
+                        icon: "arrow.uturn.left",
+                        label: "Leave Mic",
+                        isDestructive: true,
+                        action: { await onLeaveMic?() }
+                    )
+                }
+                
+            }
         }
     }
 }

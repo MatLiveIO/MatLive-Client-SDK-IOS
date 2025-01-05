@@ -9,14 +9,14 @@ import SwiftUI
 
 enum Page: Identifiable ,Hashable{
     case HomeScreen
-    case AudioScreen(roomId: String, roomName: String)
+    case AudioScreen(roomId: String, roomName: String,userName:String)
 
     var id: String {
         switch self {
         case .HomeScreen:
             return "HomeScreen"
-        case .AudioScreen(let roomId, let roomName):
-            return "AudioScreen:\(roomId):\(roomName)"
+        case .AudioScreen(let roomId, let roomName,let userName):
+            return "AudioScreen:\(roomId):\(roomName):\(userName)"
         }
     }
 }
@@ -34,14 +34,14 @@ enum Sheet: Identifiable {
 
 enum FullScreenCover: Identifiable {
     case HomeScreen
-    case AudioScreen(roomId: String, roomName: String)
+    case AudioScreen(roomId: String, roomName: String,userName:String)
     
     var id: String {
         switch self {
         case .HomeScreen:
             return "HomeScreen"
-        case .AudioScreen(let roomId, let roomName):
-            return "AudioScreen_\(roomId)_\(roomName)"
+        case .AudioScreen(let roomId, let roomName, let userName):
+            return "AudioScreen_\(roomId)_\(roomName)_\(userName)"
         }
     }
 }
@@ -85,8 +85,8 @@ public class Coordinator: ObservableObject {
         switch page {
         case .HomeScreen:
             HomeScreen()
-        case .AudioScreen(let roomId, let token):
-            AudioScreen(roomId: roomId, token: token)
+        case .AudioScreen(let roomId, let token,let userName):
+            AudioScreen(roomId: roomId, token: token,userName: userName)
         }
     }
     
@@ -107,8 +107,8 @@ public class Coordinator: ObservableObject {
             NavigationStack {
               HomeScreen()
             }
-        case .AudioScreen(let roomId, let token):
-            AudioScreen(roomId: roomId, token: token)
+        case .AudioScreen(let roomId, let token,let userName):
+            AudioScreen(roomId: roomId, token: token,userName: userName)
         }
     }
     

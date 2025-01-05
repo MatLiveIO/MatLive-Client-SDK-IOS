@@ -24,7 +24,11 @@ struct HomeScreen: View {
                         .font(.system(size: 16))
                         .foregroundStyle(Color.gray)
                         .multilineTextAlignment(.center)
-                    
+                    HStack {
+                        TextField("Enter user name", text: $HomeVM.userName)
+                    }
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.horizontal)
                     Button(action: {
                         Task{
                             await HomeVM.createRoom()
@@ -41,12 +45,10 @@ struct HomeScreen: View {
 
                     Button(action: {
                         Task{
-                            await HomeVM.joinRoom{ roomid,token in
-                                coordinator.push(.AudioScreen(roomId: roomid, roomName: token))
-                            }
+                            await HomeVM.joinRoom(roomId: Constants.roomName, completion: { roomId, token, userName in
+                                coordinator.push(.AudioScreen(roomId: roomId, roomName: token,userName: userName))
+                            })
                         }
-                        
-
                     }, label: {
                         if HomeVM.isJoinLoading{
                             ProgressView()

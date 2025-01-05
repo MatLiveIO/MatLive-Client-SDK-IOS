@@ -22,7 +22,7 @@ class HomeViewModel:ObservableObject{
     
     // MARK: Message
     @Published  var snackBarMessage:String = ""
-    
+    @Published var userName :String = ""
     private let livekitService = LiveKitService(baseUrl: "https://tkstg.t-wasel.com")
     
     
@@ -45,7 +45,7 @@ class HomeViewModel:ObservableObject{
         }
     }
     
-    func joinRoom(completion:@escaping (String,String)->Void) async {
+    func joinRoom(roomId:String,completion:@escaping (String,String,String)->Void) async {
         isJoinLoading = true
         do {
             let tokenResponse = try await livekitService.createToken(userName: "user-\(Date.now)", roomId: Constants.roomName)
@@ -53,7 +53,7 @@ class HomeViewModel:ObservableObject{
                 return
             }
             isJoinLoading = false
-            completion(Constants.roomName,token)
+            completion(roomId,token,userName)
         } catch  {
             isJoinLoading = false
             snackBarMessage = "Error:\(error.localizedDescription)"
