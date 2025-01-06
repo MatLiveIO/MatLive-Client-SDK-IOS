@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		390AA1DF2D2ABB3A00CE29CA /* MatLiveClientSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 390AA1DE2D2ABB3A00CE29CA /* MatLiveClientSDK */; };
+		395EEF202D2B9A02000F8814 /* MatLiveClientSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 395EEF1F2D2B9A02000F8814 /* MatLiveClientSDK */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				390AA1DF2D2ABB3A00CE29CA /* MatLiveClientSDK in Frameworks */,
+				395EEF202D2B9A02000F8814 /* MatLiveClientSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = MatLiveExample;
 			packageProductDependencies = (
-				390AA1DE2D2ABB3A00CE29CA /* MatLiveClientSDK */,
+				395EEF1F2D2B9A02000F8814 /* MatLiveClientSDK */,
 			);
 			productName = MatLiveExample;
 			productReference = 390AA1B72D2AB2D700CE29CA /* MatLiveExample.app */;
@@ -101,6 +101,7 @@
 			mainGroup = 390AA1AE2D2AB2D700CE29CA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				395EEF1E2D2B9A02000F8814 /* XCLocalSwiftPackageReference "../../../MatLiveClientSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 390AA1B82D2AB2D700CE29CA /* Products */;
@@ -259,10 +260,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MatLiveExample/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = P5NTR89GQN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Open Bluetooth to connect to device";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Open Bluetooth to connect to device";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App request open your camera";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow app access microphone";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -289,10 +294,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MatLiveExample/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = P5NTR89GQN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Open Bluetooth to connect to device";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Open Bluetooth to connect to device";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App request open your camera";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow app access microphone";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -335,8 +344,15 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		395EEF1E2D2B9A02000F8814 /* XCLocalSwiftPackageReference "../../../MatLiveClientSDK" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../MatLiveClientSDK;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		390AA1DE2D2ABB3A00CE29CA /* MatLiveClientSDK */ = {
+		395EEF1F2D2B9A02000F8814 /* MatLiveClientSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MatLiveClientSDK;
 		};

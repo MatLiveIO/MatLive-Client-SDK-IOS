@@ -5,6 +5,8 @@
 //  Created by anas amer on 02/01/2025.
 //
 import SwiftUI
+import MatLiveClientSDK
+
 struct ChatListWidget:View {
     @ObservedObject private var viewModel = LiveRoomEventReceiverManager.shared
     var body: some View {

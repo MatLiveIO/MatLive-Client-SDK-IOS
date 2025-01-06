@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 import SwiftUI
-
+import MatLiveClientSDK
 
 @MainActor
 class AudioRoomViewModel: ObservableObject {
@@ -51,7 +51,7 @@ class AudioRoomViewModel: ObservableObject {
                 token: token,
                 name:userName,
                 avatar: images[id],
-                userId: "\(id)",
+                userId: "\(Int.random(in: 0..<1000))",
                 roomId: roomId,
                 metadata: "")
             

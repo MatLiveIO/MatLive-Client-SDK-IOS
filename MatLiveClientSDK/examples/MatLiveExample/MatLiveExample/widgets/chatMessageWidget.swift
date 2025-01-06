@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import MatLiveClientSDK
 
 struct ChatMessageWidget: View {
     let message: MatLiveChatMessage

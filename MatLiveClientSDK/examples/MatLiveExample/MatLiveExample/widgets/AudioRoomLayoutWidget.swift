@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import Combine
+import MatLiveClientSDK
 
 struct AudioRoomLayoutWidget: View {
     @ObservedObject private var audioVM = AudioRoomViewModel()

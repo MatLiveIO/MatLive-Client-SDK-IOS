@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MatLiveClientSDK
 
 enum Page: Identifiable ,Hashable{
     case HomeScreen

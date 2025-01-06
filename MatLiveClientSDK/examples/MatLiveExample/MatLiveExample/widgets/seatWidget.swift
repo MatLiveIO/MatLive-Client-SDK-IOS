@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import MatLiveClientSDK
 
 struct SeatWidget: View {
     @ObservedObject var seat: MatLiveRoomAudioSeat
@@ -30,8 +31,8 @@ struct SeatWidget: View {
                     Circle()
                         .fill(Color.gray.opacity(0.3))
                         .frame(width: 50, height: 50)
-                    if let user = seat.currentUser {
-                        AsyncImage(url: URL(string: user.avatarUrl!)) { image in
+                    if let user = seat.currentUser , let avatarUrl = user.avatarUrl{
+                        AsyncImage(url: URL(string: avatarUrl)) { image in
                             image
                                 .resizable()
                                 .scaledToFit()

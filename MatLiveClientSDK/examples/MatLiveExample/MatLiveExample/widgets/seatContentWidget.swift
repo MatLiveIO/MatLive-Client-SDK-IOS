@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import MatLiveClientSDK
 
 struct SeatContentWidget: View {
     let seat: MatLiveRoomAudioSeat

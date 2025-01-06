@@ -29,19 +29,19 @@ struct HomeScreen: View {
                     }
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
-                    Button(action: {
-                        Task{
-                            await HomeVM.createRoom()
-                        }
-                    }, label: {
-                        if HomeVM.isCreateRoomLoading{
-                            ProgressView()
-                        }else{
-                            Text("Create Room")
-                                .font(.system(size: 18))
-                        }
-                    })
-                    .disabled(HomeVM.isCreateRoomLoading)
+//                    Button(action: {
+//                        Task{
+//                            await HomeVM.createRoom()
+//                        }
+//                    }, label: {
+//                        if HomeVM.isCreateRoomLoading{
+//                            ProgressView()
+//                        }else{
+//                            Text("Create Room")
+//                                .font(.system(size: 18))
+//                        }
+//                    })
+//                    .disabled(HomeVM.isCreateRoomLoading)
 
                     Button(action: {
                         Task{
@@ -61,6 +61,9 @@ struct HomeScreen: View {
                     
                 }
             }
+            .onDisappear(perform: {
+                HomeVM.userName = ""
+            })
             .snackbar(show: $HomeVM.showCreateRoomSuccess, bgColor: .green, txtColor: .white, icon: "checkmark", iconColor: .white, message:HomeVM.snackBarMessage)
             .snackbar(show: $HomeVM.showError, bgColor: .red, txtColor: .white, icon: "xmark", iconColor: .white, message: HomeVM.snackBarMessage)
             .navigationTitle("MatLive Audio Rooms")
