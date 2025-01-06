@@ -36,7 +36,7 @@ public class MatLiveRoomManager: ObservableObject {
     @Published public var seatService: RoomSeatService?
     @Published public var matLiveJoinRoomManager = MatLiveJoinRoomManager.shared
     
-    var onMic :Bool = false
+    public var onMic :Bool = false
     var isSetup: Bool = false
     var flagStartedReplayKit: Bool = false
     var onInvitedToMic:((Int)->Void)?
@@ -107,7 +107,10 @@ public class MatLiveRoomManager: ObservableObject {
     }
 
     public func removeUserFromSeat(seatIndex: Int) async throws {
-        let _ = await seatService?.removeUserFromSeat(seatIndex)
+        let userId = await seatService?.removeUserFromSeat(seatIndex)
+        if let userId {
+            await LiveRoomEventSenderManager().removeSpecker(seatIndex: seatIndex, userId: userId)
+        }
     }
 
     public func switchSeat(toSeatIndex: Int) async throws {

@@ -41,7 +41,7 @@ public class MatLiveJoinRoomManager: ObservableObject {
     private let request = JoinRequest()
     private var subscription: AnyCancellable?
     var audioTrack: LocalAudioTrack?
-    var currentUser: MatLiveUser?
+    public var currentUser: MatLiveUser?
     var roomId: String = ""
     var onInvitedToMic:((Int)->Void)?
     var onSendGift:((String)->Void)?
@@ -106,7 +106,8 @@ public class MatLiveJoinRoomManager: ObservableObject {
             userId: userId,
             name: name,
             avatar: avatar,
-            roomId: roomId
+            roomId: roomId,
+            metaData: metadata
         )
 
         do {

@@ -97,5 +97,15 @@ public class LiveRoomEventSenderManager {
             print("Failed to request to take mic: \(error)")
         }
     }
-    
+    func removeSpecker(seatIndex:Int , userId:String) async {
+        do {
+            try await publish(data: [
+                "event": MatLiveEvents.removeUserFromSeat,
+                "seatIndex": seatIndex,
+                "userId":userId
+            ])
+        } catch {
+            print("Failed to request to take mic: \(error)")
+        }
+    }
 }
