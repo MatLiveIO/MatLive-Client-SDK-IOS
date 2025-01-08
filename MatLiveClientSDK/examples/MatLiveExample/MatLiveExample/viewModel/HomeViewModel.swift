@@ -23,7 +23,7 @@ class HomeViewModel:ObservableObject{
     // MARK: Message
     @Published  var snackBarMessage:String = ""
     @Published var userName :String = ""
-    private let livekitService = LiveKitService(baseUrl: "https://tkstg.t-wasel.com")
+    private let livekitService = LiveKitService()
     
     
     func createRoom() async {

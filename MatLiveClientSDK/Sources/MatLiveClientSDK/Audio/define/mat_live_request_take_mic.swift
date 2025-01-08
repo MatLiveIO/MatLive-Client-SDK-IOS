@@ -7,10 +7,19 @@
 
 import Foundation
 
-public class MatLiveRequestTackMic{
-    public  var seatIndex:Int
-    public  var user:MatLiveUser
-    public  init(seatIndex: Int, user: MatLiveUser) {
+public class MatLiveRequestTackMic {
+    
+    /// The index of the seat associated with the microphone request.
+    public var seatIndex: Int
+    
+    /// The user making the microphone request.
+    public var user: MatLiveUser
+    
+    /// Initializes a new instance of `MatLiveRequestTackMic`.
+    /// - Parameters:
+    ///   - seatIndex: The index of the seat associated with the request.
+    ///   - user: The user making the request.
+    public init(seatIndex: Int, user: MatLiveUser) {
         self.seatIndex = seatIndex
         self.user = user
     }

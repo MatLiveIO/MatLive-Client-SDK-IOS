@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import Combine
 
+
+//MARK: RoomSeatService will manage the layout of seats and update seats data , update seats rows numbers
 @MainActor
 public class RoomSeatService: ObservableObject {
     @Published public var seatList: [MatLiveRoomAudioSeat] = [] // List of seats
@@ -17,9 +19,8 @@ public class RoomSeatService: ObservableObject {
     var hostSeatIndex:Int = 0
     var isBatchOperation:Bool = false
     public var layoutConfig:MatLiveAudioRoomLayoutConfig?
-    private var liveKitService = LiveKitService(baseUrl: "https://tkstg.t-wasel.com")
+    private var liveKitService = LiveKitService()
     
-    // MARK: not complete return to the  String get roomId => MatLiveJoinRoomManger.instance.roomId; in flutter
     var roomId:String {
         matLiveJoinRoomManager.roomId
     }
@@ -28,7 +29,7 @@ public class RoomSeatService: ObservableObject {
     }
     
     
-   
+    // this method will init the room layout configuration like number of seats , rows.
     public func initWithConfig(config:MatLiveAudioRoomLayoutConfig) async{
         layoutConfig = config
         initSeat(config: config)
@@ -49,16 +50,16 @@ public class RoomSeatService: ObservableObject {
               let data = metadata.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
               let seats = json["seats"] as? [[String: Any]] else { return }
-
+        
         for item in seats {
             guard let seatIndex = item["seatIndex"] as? Int, seatIndex >= 0, seatIndex < seatList.count else { continue }
             let seat = seatList[seatIndex]
-
+            
             // Update seat lock status
             if let isLocked = item["isLocked"] as? Bool {
                 seat.isLocked = isLocked
             }
-
+            
             // Handle current user data
             if let currentUser = seat.currentUser, let currentUserData = item["currentUser"] as? [String: Any] {
                 currentUser.name = currentUserData["name"] as? String ?? ""
@@ -81,8 +82,8 @@ public class RoomSeatService: ObservableObject {
             }
         }
     }
-
- 
+    
+    
     
     // Add rows to seats (e.g., add more seats to the room)
     func addSeatRow(_ oldCount: Int, _ newCount: Int) async{
@@ -101,7 +102,7 @@ public class RoomSeatService: ObservableObject {
             print(error.localizedDescription)
         }
     }
-    
+    // this method will return the seat data , like which user on this seat .
     func getSeatInfo() -> String{
         var seats: [[String: Any]] = []
         
@@ -262,6 +263,7 @@ public class RoomSeatService: ObservableObject {
         return userId
     }
     
+    // check if the user take a seat when he leave the room
     private func leaveSeatIfHave()async{
         if let seat = seatList.first(where: {
             $0.currentUser?.userId == matLiveJoinRoomManager.currentUser?.userId
@@ -271,6 +273,7 @@ public class RoomSeatService: ObservableObject {
         }
     }
     
+    // MARK: this method will remove all messages , remove user from seat , and cancle subscriptions
     func clear()async{
         await leaveSeatIfHave()
         seatList.removeAll()
@@ -282,8 +285,8 @@ public class RoomSeatService: ObservableObject {
     }
 }
 extension RoomSeatService{
-    
-   private func UpdateRoomMetaData()async{
+    //MARK: update room data
+    private func UpdateRoomMetaData()async{
         do {
             let _ = try await liveKitService.updateRoomMetadata(roomId: roomId, metaData: getSeatInfo())
         } catch  {

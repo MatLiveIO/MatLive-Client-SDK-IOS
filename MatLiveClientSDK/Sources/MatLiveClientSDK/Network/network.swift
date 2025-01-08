@@ -21,6 +21,8 @@ enum NetworkError: Error {
     case invalidURL
     case decodingError
 }
+// MARK: network amager is response to call apis it accept base url and path , request type [post , get ,...]
+// and handle the errors.
 
 actor NetworkManager {
     

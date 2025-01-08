@@ -10,41 +10,77 @@ import SwiftUI
 import Combine
 internal import LiveKit
 
+
+/// Represents the type of track a participant can have in a live room.
 public enum ParticipantTrackType {
+    /// Represents user media tracks, such as camera or microphone.
     case userMedia
+
+    /// Represents screen sharing tracks.
     case screenShare
 }
 
+/// Represents a track associated with a participant in a live room.
 public class ParticipantTrack {
+    /// The participant associated with this track.
     var participant: Participant
+
+    /// The type of track (user media or screen share).
     var type: ParticipantTrackType
-    
+
+    /// Initializes a new `ParticipantTrack`.
+    /// - Parameters:
+    ///   - participant: The participant associated with the track.
+    ///   - type: The type of track, defaulting to `.userMedia`.
     init(participant: Participant, type: ParticipantTrackType = .userMedia) {
         self.participant = participant
         self.type = type
     }
 }
 
-private protocol LiveRoomDelegate:RoomDelegate{
-    
-}
+/// Private protocol extending `RoomDelegate` for live room events.
+private protocol LiveRoomDelegate: RoomDelegate {}
 
+/// Manages the live room session, including participants, seats, and interactions.
 public class MatLiveRoomManager: ObservableObject {
+    /// Shared singleton instance of `MatLiveRoomManager`.
     public static let shared = MatLiveRoomManager()
+
+    /// List of participant tracks in the room.
     @Published public var participantTracks: [ParticipantTrack] = []
+
+    /// The current room instance.
     @Published var room: Room?
+
+    /// Service managing room seats.
     @Published public var seatService: RoomSeatService?
+
+    /// Instance of `MatLiveJoinRoomManager` for managing room join operations.
     @Published public var matLiveJoinRoomManager = MatLiveJoinRoomManager.shared
-    
-    public var onMic :Bool = false
+
+    /// Indicates whether the local user is on the microphone.
+    public var onMic: Bool = false
+
+    /// Tracks whether the manager is set up.
     var isSetup: Bool = false
+
+    /// Flag indicating if ReplayKit has started.
     var flagStartedReplayKit: Bool = false
-    var onInvitedToMic:((Int)->Void)?
-    var onSendGift:((String)->Void)?
-    
+
+    /// Callback for handling microphone invitations.
+    var onInvitedToMic: ((Int) -> Void)?
+
+    /// Callback for sending gifts in the live room.
+    var onSendGift: ((String) -> Void)?
+
+    /// Private initializer for singleton.
     private init() {}
 
-    func setup(onInvitedToMic:((Int)->Void)?,onSendGift:((String)->Void)?) async throws {
+    /// Sets up the live room manager.
+    /// - Parameters:
+    ///   - onInvitedToMic: Callback for microphone invitations.
+    ///   - onSendGift: Callback for sending gifts.
+    func setup(onInvitedToMic: ((Int) -> Void)?, onSendGift: ((String) -> Void)?) async throws {
         guard room != nil && !isSetup else { return }
         try await askPublish(enable: false)
         self.seatService = await RoomSeatService()
@@ -52,8 +88,8 @@ public class MatLiveRoomManager: ObservableObject {
         isSetup = true
     }
 
-    public  func close() async {
-
+    /// Closes the live room session and clears resources.
+    public func close() async {
         isSetup = false
         await seatService?.clear()
         LiveRoomEventReceiverManager.shared.messages = []
@@ -61,6 +97,8 @@ public class MatLiveRoomManager: ObservableObject {
         await room?.disconnect()
     }
 
+    /// Takes a seat in the live room.
+    /// - Parameter seatIndex: The index of the seat to occupy.
     public func takeSeat(seatIndex: Int) async throws {
         try await askPublish(enable: true)
         onMic = true
@@ -70,15 +108,21 @@ public class MatLiveRoomManager: ObservableObject {
         )
     }
 
-    public  func lockSeat(seatIndex: Int) async throws {
+    /// Locks a seat to prevent others from occupying it.
+    /// - Parameter seatIndex: The index of the seat to lock.
+    public func lockSeat(seatIndex: Int) async throws {
         await seatService?.lockSeat(seatIndex)
     }
 
+    /// Unlocks a previously locked seat.
+    /// - Parameter seatIndex: The index of the seat to unlock.
     public func unlockSeat(seatIndex: Int) async throws {
         await seatService?.unlockSeat(seatIndex)
     }
 
-    public  func leaveSeat(seatIndex: Int) async throws {
+    /// Leaves a seat in the live room.
+    /// - Parameter seatIndex: The index of the seat to leave.
+    public func leaveSeat(seatIndex: Int) async throws {
         try await askPublish(enable: false)
         onMic = false
         await seatService?.leaveSeat(
@@ -87,6 +131,8 @@ public class MatLiveRoomManager: ObservableObject {
         )
     }
 
+    /// Sends a message to the live room.
+    /// - Parameter message: The message to send.
     @MainActor
     public func sendMessage(_ message: String) async throws {
         LiveRoomEventReceiverManager.shared.messages.append(MatLiveChatMessage(
@@ -96,16 +142,22 @@ public class MatLiveRoomManager: ObservableObject {
         await LiveRoomEventSenderManager().sendMessage(message: message)
     }
 
+    /// Mutes a seat in the live room.
+    /// - Parameter seatIndex: The index of the seat to mute.
     public func muteSeat(seatIndex: Int) async throws {
         try await askPublishMute(enable: true)
         await seatService?.muteSeat(seatIndex)
     }
 
+    /// Unmutes a seat in the live room.
+    /// - Parameter seatIndex: The index of the seat to unmute.
     public func unmuteSeat(seatIndex: Int) async throws {
         try await askPublishMute(enable: false)
         await seatService?.unMuteSeat(seatIndex)
     }
 
+    /// Removes a user from a seat in the live room.
+    /// - Parameter seatIndex: The index of the seat to remove the user from.
     public func removeUserFromSeat(seatIndex: Int) async throws {
         let userId = await seatService?.removeUserFromSeat(seatIndex)
         if let userId {
@@ -113,21 +165,16 @@ public class MatLiveRoomManager: ObservableObject {
         }
     }
 
+    /// Switches a user from one seat to another.
+    /// - Parameter toSeatIndex: The index of the seat to switch to.
     public func switchSeat(toSeatIndex: Int) async throws {
         guard let userId = matLiveJoinRoomManager.currentUser?.userId,
-              let seatId = await  seatService?.seatList.firstIndex(where: { $0.currentUser?.userId == userId }) else { return }
+              let seatId = await seatService?.seatList.firstIndex(where: { $0.currentUser?.userId == userId }) else { return }
         await seatService?.switchSeat(from: seatId, to: toSeatIndex, userId: userId)
     }
 
-
-    private func askPublishMute(enable: Bool) async throws {
-        if enable {
-            try await room?.localParticipant.setMicrophone(enabled: true)
-        } else {
-            try await room?.localParticipant.setMicrophone(enabled: false)
-        }
-    }
-
+    /// Requests to enable or disable publishing for microphone and camera.
+    /// - Parameter enable: Whether to enable or disable publishing.
     private func askPublish(enable: Bool) async throws {
         if enable {
             try await matLiveJoinRoomManager.audioTrack?.start()
@@ -136,23 +183,30 @@ public class MatLiveRoomManager: ObservableObject {
         }
         try await room?.localParticipant.setMicrophone(enabled: enable)
         try await room?.localParticipant.setCamera(enabled: false)
-
     }
-    
-    private func sortedParticipants(){
-        var userMediaTracks:[ParticipantTrack] = []
+
+    /// Requests to mute or unmute the microphone.
+    /// - Parameter enable: Whether to enable or disable the microphone.
+    private func askPublishMute(enable: Bool) async throws {
+        if enable {
+            try await room?.localParticipant.setMicrophone(enabled: true)
+        } else {
+            try await room?.localParticipant.setMicrophone(enabled: false)
+        }
+    }
+
+    /// Sorts participants in the room based on join time.
+    private func sortedParticipants() {
+        var userMediaTracks: [ParticipantTrack] = []
         room!.remoteParticipants.values.forEach { participant in
             participant.videoTracks.forEach { track in
                 if !(track.kind == .video && track.track?.source == .screenShareVideo) {
                     userMediaTracks.append(ParticipantTrack(participant: participant))
                 }
             }
-            //            if !participant.isScreenShareEnabled(){
-            //                userMediaTracks.append(ParticipantTrack(participant: participant))
-            //            }
         }
-        userMediaTracks.sort(by: {$0.participant.joinedAt ?? Date() < $1.participant.joinedAt ?? Date()})
-        
+        userMediaTracks.sort(by: { $0.participant.joinedAt ?? Date() < $1.participant.joinedAt ?? Date() })
+
         let localParticipantTracks = room!.localParticipant.localVideoTracks
         localParticipantTracks.forEach { track in
             if !(track.kind == .video && track.track?.source == .screenShareVideo) {
@@ -162,6 +216,7 @@ public class MatLiveRoomManager: ObservableObject {
         participantTracks = userMediaTracks
     }
 }
+
 
 extension MatLiveRoomManager:LiveRoomDelegate{
     
