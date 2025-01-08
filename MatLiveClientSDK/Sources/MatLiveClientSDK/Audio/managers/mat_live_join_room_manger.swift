@@ -11,15 +11,15 @@ import Combine
 
 /// Represents a request for joining a live room with specific configurations.
 public class JoinRequest {
-    var url: String
-    var token: String
-    var e2ee: Bool
-    var e2eeKey: String?
-    var simulcast: Bool
-    var adaptiveStream: Bool
-    var dynacast: Bool
-    var preferredCodec: String
-    var enableBackupVideoCodec: Bool
+    public var url: String
+    public var token: String
+    public var e2ee: Bool
+    public var e2eeKey: String?
+    public var simulcast: Bool
+    public var adaptiveStream: Bool
+    public var dynacast: Bool
+    public var preferredCodec: String
+    public var enableBackupVideoCodec: Bool
 
     /// Initializes a new `JoinRequest` with optional parameters for configuration.
     /// - Parameters:
@@ -32,7 +32,7 @@ public class JoinRequest {
     ///   - dynacast: Enables dynamic stream adjustments.
     ///   - preferredCodec: The preferred video codec (default: "VP8").
     ///   - enableBackupVideoCodec: Enables a backup video codec in case of issues.
-    init(url: String = "", token: String = "", e2ee: Bool = false, e2eeKey: String? = nil, simulcast: Bool = true, adaptiveStream: Bool = true, dynacast: Bool = true, preferredCodec: String = "VP8", enableBackupVideoCodec: Bool = true) {
+    public init(url: String = "", token: String = "", e2ee: Bool = false, e2eeKey: String? = nil, simulcast: Bool = true, adaptiveStream: Bool = true, dynacast: Bool = true, preferredCodec: String = "VP8", enableBackupVideoCodec: Bool = true) {
         self.url = url
         self.token = token
         self.e2ee = e2ee
@@ -56,9 +56,9 @@ public class MatLiveJoinRoomManager: ObservableObject {
     private var subscription: AnyCancellable?
     var audioTrack: LocalAudioTrack?
     public var currentUser: MatLiveUser?
-    var roomId: String = ""
-    var onInvitedToMic: ((Int) -> Void)?
-    var onSendGift: ((String) -> Void)?
+    public var roomId: String = ""
+    public var onInvitedToMic: ((Int) -> Void)?
+    public var onSendGift: ((String) -> Void)?
     var permissionsManager: PermissionsManager = PermissionsManager()
 
     /// Private initializer for singleton pattern.

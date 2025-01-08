@@ -66,7 +66,7 @@ public class MatLiveUser: ObservableObject {
 }
 
 
-enum MatLiveUserRole {
+public enum MatLiveUserRole {
     case audience
     case coHost
     case host

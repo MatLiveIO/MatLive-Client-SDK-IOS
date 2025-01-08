@@ -15,8 +15,8 @@ import Combine
 public class RoomSeatService: ObservableObject {
     @Published public var seatList: [MatLiveRoomAudioSeat] = [] // List of seats
     @Published public var matLiveJoinRoomManager = MatLiveJoinRoomManager.shared // List of seats
-    var subscriptions:[AnyCancellable] = []
-    var hostSeatIndex:Int = 0
+    public var subscriptions:[AnyCancellable] = []
+    public var hostSeatIndex:Int = 0
     var isBatchOperation:Bool = false
     public var layoutConfig:MatLiveAudioRoomLayoutConfig?
     private var liveKitService = LiveKitService()

@@ -68,10 +68,10 @@ public class MatLiveRoomManager: ObservableObject {
     var flagStartedReplayKit: Bool = false
 
     /// Callback for handling microphone invitations.
-    var onInvitedToMic: ((Int) -> Void)?
+    public var onInvitedToMic: ((Int) -> Void)?
 
     /// Callback for sending gifts in the live room.
-    var onSendGift: ((String) -> Void)?
+    public var onSendGift: ((String) -> Void)?
 
     /// Private initializer for singleton.
     private init() {}
