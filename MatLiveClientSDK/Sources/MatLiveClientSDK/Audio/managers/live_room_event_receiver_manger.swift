@@ -6,25 +6,41 @@
 //
 
 import Foundation
-import SwiftUI
-import Combine
 internal import LiveKit
 
-
+/// Manages live room events and updates relevant state based on received data.
 public class LiveRoomEventReceiverManager: ObservableObject {
-    nonisolated(unsafe) public static let shared = LiveRoomEventReceiverManager()
-    var seatService: RoomSeatService?
-    @Published public var messages: [MatLiveChatMessage] = [] // Observing messages list
-    @Published public var inviteRequests: [MatLiveRequestTackMic] = [] // Observing messages list
-    @Published public var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
-    @Published public var matliveRoomManager = MatLiveRoomManager.shared
-    private init(){}
     
-
+    /// Shared instance of `LiveRoomEventReceiverManager`.
+    nonisolated(unsafe) public static let shared = LiveRoomEventReceiverManager()
+    
+    /// Service responsible for managing room seat operations.
+    var seatService: RoomSeatService?
+    
+    /// List of chat messages in the room, updated when a new message is received.
+    @Published public var messages: [MatLiveChatMessage] = []
+    
+    /// List of mic-taking requests, updated when a new request is made.
+    @Published public var inviteRequests: [MatLiveRequestTackMic] = []
+    
+    /// Manager responsible for joining rooms in the MatLive system.
+    @Published public var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
+    
+    /// Manager responsible for managing the room state in the MatLive system.
+    @Published public var matliveRoomManager = MatLiveRoomManager.shared
+    
+    // Private initializer to ensure only one instance of this manager.
+    private init() {}
+    
+    /// Receives event data from the live room and handles various events like messages, mic requests, and gifts.
+    /// - Parameters:
+    ///   - data: A dictionary containing the event data.
+    ///   - onInvitedToMic: A closure called when the user is invited to take the microphone.
+    ///   - onSendGift: A closure called when a gift is sent.
     public nonisolated func receivedData(data: [String: Any],
-                      onInvitedToMic: ((Int) -> Void)?,
-                      onSendGift: ((String) -> Void)?
-    )async {
+                                         onInvitedToMic: ((Int) -> Void)?,
+                                         onSendGift: ((String) -> Void)?) async {
+        // Extract event type and user data from the received data.
         guard let event = data["event"] as? Int else { return }
         guard let user = data["user"] as? [String: Any] else { return }
         
@@ -35,6 +51,7 @@ public class LiveRoomEventReceiverManager: ObservableObject {
             roomId: data["roomId"] as! String
         )
         
+        // Switch statement to handle different event types.
         switch event {
         case MatLiveEvents.sendMessage:
             if let message = data["message"] as? String {
@@ -45,11 +62,11 @@ public class LiveRoomEventReceiverManager: ObservableObject {
             }
             
         case MatLiveEvents.removeUserFromSeat:
-            guard data["userId"] as? String == matliveJoinRoomManager.currentUser?.userId else{return}
+            guard data["userId"] as? String == matliveJoinRoomManager.currentUser?.userId else { return }
             try? await matliveJoinRoomManager.audioTrack?.stop()
-            do{
+            do {
                 try await matliveRoomManager.room?.localParticipant.setMicrophone(enabled: false)
-            } catch{
+            } catch {
                 print(error.localizedDescription)
             }
             matliveRoomManager.onMic = false
@@ -58,29 +75,29 @@ public class LiveRoomEventReceiverManager: ObservableObject {
             self.messages = []
             
         case MatLiveEvents.inviteUserToTakeMic:
-            guard let userid = data["userId"] as? String else{return}
-            guard matliveJoinRoomManager.currentUser?.userId == userid && onInvitedToMic != nil else {return}
-            guard let seatIndex = data["seatIndex"] as? Int else{return}
+            guard let userid = data["userId"] as? String else { return }
+            guard matliveJoinRoomManager.currentUser?.userId == userid && onInvitedToMic != nil else { return }
+            guard let seatIndex = data["seatIndex"] as? Int else { return }
             onInvitedToMic!(seatIndex)
             
         case MatLiveEvents.leaveSeat:
-            // Handle leave room
+            // Handle user leaving the seat (if necessary).
             break
             
         case MatLiveEvents.requestTakeMic:
-            // Handle request to take mic
             if let seatIndex = data["seatIndex"] as? Int {
                 let newRequest = MatLiveRequestTackMic(seatIndex: seatIndex, user: matUser)
                 self.inviteRequests.append(newRequest)
             }
             break
+            
         case MatLiveEvents.sendGift:
-            if onSendGift != nil , let gift = data["gift"] as? String {
-                onSendGift!(gift)
+            if let gift = data["gift"] as? String {
+                onSendGift?(gift)
             }
+            
         default:
             break
         }
-        
     }
 }
