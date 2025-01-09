@@ -15,15 +15,30 @@ enum HTTPMethod: String {
 }
 
 /// Network-related errors
-enum NetworkError: Error {
+public enum NetworkError: Error {
     case invalidResponse
     case invalidJSON
     case invalidURL
     case decodingError
+    case generalError(String)
+    
+   public var message: String {
+        switch self {
+        case .invalidResponse:
+            return "The server response was invalid."
+        case .invalidJSON:
+            return "The JSON data could not be parsed."
+        case .invalidURL:
+            return "The URL provided was invalid."
+        case .decodingError:
+            return "The response data could not be decoded."
+        case .generalError(let error):
+            return error
+        }
+    }
 }
 // MARK: network amager is response to call apis it accept base url and path , request type [post , get ,...]
 // and handle the errors.
-
 actor NetworkManager {
     
     private var decoder = JSONDecoder()
@@ -37,7 +52,7 @@ actor NetworkManager {
         queryParameters: [String: String]? = nil,
         body: RequestBody? = nil,
         headers: [String: String]? = nil
-    ) async throws -> JSONResponse {
+    ) async -> Result<JSONResponse, NetworkError> {
         var urlString = url + path
 
         // Add query parameters if provided
@@ -45,22 +60,30 @@ actor NetworkManager {
             var components = URLComponents(string: urlString)
             components?.queryItems = queryParameters.map { URLQueryItem(name: $0.key, value: $0.value) }
             guard let updatedURLString = components?.url?.absoluteString else {
-                throw NetworkError.invalidURL
+                return .failure(.invalidURL)
             }
             urlString = updatedURLString
         }
         
-        guard let url = URL(string: urlString) else { throw NetworkError.invalidURL }
+        guard let url = URL(string: urlString) else {
+            return .failure(.invalidURL)
+        }
         
-        let (data, _) = try await fetchData(url: url, method: method, body: body, headers: headers)
-          do {
-              guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                  throw NetworkError.invalidJSON
-              }
-              return JSONResponse(json: jsonObject)
-          } catch {
-              throw NetworkError.invalidJSON
-          }
+        let result = await fetchData(url: url, method: method, body: body, headers: headers)
+        
+        switch result {
+        case .success(let data):
+            do {
+                guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                    return .failure(.invalidJSON)
+                }
+                return .success(JSONResponse(json: jsonObject))
+            } catch {
+                return .failure(.invalidJSON)
+            }
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     /// A helper method to perform the actual network request.
@@ -69,7 +92,7 @@ actor NetworkManager {
         method: HTTPMethod,
         body: RequestBody?,
         headers: [String: String]?
-    ) async throws -> (Data, URLResponse) {
+    ) async -> Result<Data, NetworkError> {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
         
@@ -86,85 +109,31 @@ actor NetworkManager {
                     urlRequest.httpBody = try JSONSerialization.data(withJSONObject: dictionary, options: [])
                     urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
                 } catch {
-                    throw NetworkError.invalidJSON
+                    return .failure(.invalidJSON)
                 }
             case .data(let rawData):
                 urlRequest.httpBody = rawData
             }
         }
         
-        let (data, response) = try await urlSession.data(for: urlRequest)
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkError.invalidResponse
+        do {
+            let (data, response) = try await urlSession.data(for: urlRequest)
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return .failure(.invalidResponse)
+            }
+            if !(200...299).contains(httpResponse.statusCode) {
+                // Parse backend error message
+                if let errorObject = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let errorMessage = errorObject["message"] as? String {
+                    return .failure(.generalError(errorMessage))
+                } else {
+                    return .failure(.invalidResponse)
+                }
+            }
+            
+            return .success(data)
+        } catch {
+            return .failure(.generalError(error.localizedDescription))
         }
-        return (data, response)
     }
 }
-
-
-
-//
-//actor Network{
-//    
-//    private var decoder = JSONDecoder()
-//    private var urlSession = URLSession.shared
-//
-//    /// Performs a network request and returns the raw JSON as a dictionary `[String: Any]`.
-//    func request(
-//        url: String,
-//        path:String,
-//        method: HTTPMethod = .GET,
-//        body: RequestBody? = nil,
-//        headers: [String: String]? = nil
-//    ) async throws -> [String: Any] {
-//        
-//        guard let url = URL(string: url + path) else{throw NetworkError.invalidURL}
-//        
-//        let (data, _) = try await fetchData(url: url, method: method, body: body, headers: headers)
-//        do {
-//            guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-//                throw NetworkError.invalidJSON
-//            }
-//            return jsonObject
-//        } catch {
-//            throw NetworkError.invalidJSON
-//        }
-//    }
-//    
-//    /// A helper method to perform the actual network request.
-//    private func fetchData(
-//        url: URL,
-//        method: HTTPMethod,
-//        body: RequestBody?,
-//        headers: [String: String]?
-//    ) async throws -> (Data, URLResponse) {
-//        var urlRequest = URLRequest(url: url)
-//        urlRequest.httpMethod = method.rawValue
-//        
-//        // Add headers if provided
-//        if let headers = headers {
-//            headers.forEach { urlRequest.addValue($0.value, forHTTPHeaderField: $0.key) }
-//        }
-//        
-//        // Handle body encoding
-//        if let body = body {
-//            switch body {
-//            case .json(let dictionary):
-//                do {
-//                    urlRequest.httpBody = try JSONSerialization.data(withJSONObject: dictionary, options: [])
-//                    urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//                } catch {
-//                    throw NetworkError.invalidJSON
-//                }
-//            case .data(let rawData):
-//                urlRequest.httpBody = rawData
-//            }
-//        }
-//        
-//        let (data, response) = try await urlSession.data(for: urlRequest)
-//        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-//            throw NetworkError.invalidResponse
-//        }
-//        return (data, response)
-//    }
-//}

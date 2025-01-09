@@ -12,19 +12,16 @@ import Foundation
 public class LiveRoomEventSenderManager {
     
     /// Singleton instance for the room manager.
-    var roomManager = MatLiveRoomManager.shared
-    
-    /// Singleton instance for the current user.
-    var currentUser = MatLiveJoinRoomManager.shared
+    var matlivejoinRoomManager = MatLiveJoinRoomManager.shared
     
     /// Publish event data to the room.
     /// - Parameter data: A dictionary containing the event data to be published.
     private func publish(data: [String: Any]) async throws {
-        guard let room = roomManager.room else { return }
+        guard let room = matlivejoinRoomManager.room else { return }
         var data = data
         
         // Adding user and room details to the data.
-        if let currentUser = currentUser.currentUser {
+        if let currentUser = matlivejoinRoomManager.currentUser {
             data["user"] = [
                 "userId": currentUser.userId,
                 "name": currentUser.name,

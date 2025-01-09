@@ -14,14 +14,14 @@ struct AudioRoomLayoutWidget: View {
     let onSeatTap: ((Int, MatLiveRoomAudioSeat?) -> Void)
 
     var body: some View {
-        if let layoutConfig = audioVM.matliveRoomManager.seatService!.layoutConfig {
+        if let layoutConfig = audioVM.matliveJoinRoomManager.seatService!.layoutConfig {
             VStack(spacing: layoutConfig.rowSpacing) {
                 ForEach(0..<(layoutConfig.rowConfigs.count), id: \.self) { rowIndex in
                     let rowConfig = layoutConfig.rowConfigs[rowIndex]
                     HStack(spacing: CGFloat(rowConfig.seatSpacing)) {
                         ForEach(0..<rowConfig.count, id: \.self) { seatIndex in
                             let globalIndex = audioVM.calculateGlobalIndex(rowIndex: rowIndex, seatIndex: seatIndex)
-                            let seat = audioVM.matliveRoomManager.seatService!.seatList[globalIndex]
+                            let seat = audioVM.matliveJoinRoomManager.seatService!.seatList[globalIndex]
                                 SeatWidget(
                                     seat: seat,
                                     onTap: { onSeatTap(globalIndex, seat) }

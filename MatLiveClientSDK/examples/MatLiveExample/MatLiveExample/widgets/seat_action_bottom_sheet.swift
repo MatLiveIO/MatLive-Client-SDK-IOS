@@ -33,14 +33,14 @@ struct SeatActionBottomSheet: View {
     private func UserSpecificActions(seat: MatLiveRoomAudioSeat) -> some View {
         List{
             
-            if !MatLiveRoomManager.shared.onMic , !seat.isLocked{
+            if !MatLiveJoinRoomManager.shared.onMic , !seat.isLocked{
                 ActionButton(
                     icon: "mic.fill",
                     label: "Take Mic",
                     action: { await onTakeMic?() }
                 )
             }
-            if MatLiveRoomManager.shared.onMic , !seat.isLocked{
+            if MatLiveJoinRoomManager.shared.onMic , !seat.isLocked{
                 ActionButton(
                     icon: "arrow.triangle.branch",
                     label: "Switch Mic",

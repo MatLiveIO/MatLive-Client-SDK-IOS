@@ -19,7 +19,7 @@ public class RoomSeatService: ObservableObject {
     public var hostSeatIndex:Int = 0
     var isBatchOperation:Bool = false
     public var layoutConfig:MatLiveAudioRoomLayoutConfig?
-    private var liveKitService = LiveKitService()
+    private var liveKitService = MatLiveService()
     
     var roomId:String {
         matLiveJoinRoomManager.roomId
@@ -33,7 +33,7 @@ public class RoomSeatService: ObservableObject {
     public func initWithConfig(config:MatLiveAudioRoomLayoutConfig) async{
         layoutConfig = config
         initSeat(config: config)
-        await seatsFromMetadata(MatLiveRoomManager.shared.room!.metadata);
+        await seatsFromMetadata(matLiveJoinRoomManager.room!.metadata)
     }
     func initSeat(config: MatLiveAudioRoomLayoutConfig) {
         for (columIndex , _) in config.rowConfigs.enumerated() {

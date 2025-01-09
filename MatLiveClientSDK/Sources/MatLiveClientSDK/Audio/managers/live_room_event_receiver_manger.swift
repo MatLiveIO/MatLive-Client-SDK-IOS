@@ -26,9 +26,6 @@ public class LiveRoomEventReceiverManager: ObservableObject {
     /// Manager responsible for joining rooms in the MatLive system.
     @Published public var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
     
-    /// Manager responsible for managing the room state in the MatLive system.
-    @Published public var matliveRoomManager = MatLiveRoomManager.shared
-    
     // Private initializer to ensure only one instance of this manager.
     private init() {}
     
@@ -65,11 +62,11 @@ public class LiveRoomEventReceiverManager: ObservableObject {
             guard data["userId"] as? String == matliveJoinRoomManager.currentUser?.userId else { return }
             try? await matliveJoinRoomManager.audioTrack?.stop()
             do {
-                try await matliveRoomManager.room?.localParticipant.setMicrophone(enabled: false)
+                try await matliveJoinRoomManager.room?.localParticipant.setMicrophone(enabled: false)
             } catch {
                 print(error.localizedDescription)
             }
-            matliveRoomManager.onMic = false
+            matliveJoinRoomManager.onMic = false
             
         case MatLiveEvents.clearChat:
             self.messages = []
