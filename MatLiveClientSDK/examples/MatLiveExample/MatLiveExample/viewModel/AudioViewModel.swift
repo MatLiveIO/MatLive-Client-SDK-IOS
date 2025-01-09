@@ -20,7 +20,6 @@ class AudioRoomViewModel: ObservableObject {
     @Published var selectedSeat: MatLiveRoomAudioSeat?
     @Published var selectedGlobalIndex: Int?
     @Published var matliveRoomManager = MatLiveRoomManager.shared
-    @Published var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
     @Published var textMessage = ""
     
     let id = Int.random(in: 0..<10)
@@ -39,17 +38,17 @@ class AudioRoomViewModel: ObservableObject {
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG7CH2bTx8kyDAU6Zc6rR0fX2X_4NGiANCTw&s",
     ];
     
-    func initializeRoom(roomId: String, token: String, userName:String) async {
+    func initializeRoom(roomId: String, userName:String,appKey:String) async {
     
-        await matliveJoinRoomManager.initialize(onInvitedToMic: { seatIndex in
+        await matliveRoomManager.initialize(onInvitedToMic: { seatIndex in
             
         }, onSendGift: { data in
             
         })
         do {
-            try await matliveJoinRoomManager.connect(
-                token: token,
+            try await matliveRoomManager.connect(
                 name:userName,
+                appKey: appKey,
                 avatar: images[id],
                 userId: "\(Int.random(in: 0..<1000))",
                 roomId: roomId,
@@ -73,11 +72,10 @@ class AudioRoomViewModel: ObservableObject {
     }
 
     func closeRoom() async {
-        await matliveJoinRoomManager.close()
+        await matliveRoomManager.close()
     }
 
     func sendMessage() async {
-//        messages.append(MatLiveChatMessage(roomId: matliveJoinRoomManager.roomId, message: textMessage, user: matliveJoinRoomManager.currentUser!))
         try? await matliveRoomManager.sendMessage(textMessage)
         textMessage = ""
     }

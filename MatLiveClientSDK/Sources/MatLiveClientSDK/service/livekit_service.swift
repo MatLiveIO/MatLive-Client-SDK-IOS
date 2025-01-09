@@ -6,7 +6,7 @@
 //
 
 
-public class LiveKitService {
+public class MatLiveService {
     
     /// The base URL for the LiveKit service.
     private var baseUrl: String = "https://webapi.dev.ml.matnsolutions.co/"
@@ -22,17 +22,18 @@ public class LiveKitService {
     /// - Parameter roomId: The ID of the room to be created.
     /// - Returns: A `JSONResponse` object containing the response data from the request.
     /// - Throws: An error if the network request fails.
-    public func createRoom(roomId: String) async throws -> JSONResponse {
-        do {
-            let response  = try await network.request(url: baseUrl,
-                                                     path: "rooms/create-room" ,
-                                                     method: .POST,
-                                                     body: .json(["roomName": roomId]))
-            // Uncomment to debug: kPrint(response)
-            return response
-        } catch {
-            throw error
+    public func createRoom(roomId: String) async  -> Result<JSONResponse,NetworkError> {
+        let response  =  await network.request(url: baseUrl,
+                                                 path: "rooms/create-room" ,
+                                                 method: .POST,
+                                                 body: .json(["roomName": roomId]))
+        switch response {
+        case .success(let data):
+            return .success(data)
+        case .failure(let failure):
+            return .failure(failure)
         }
+
     }
     
     /// Updates metadata for a specified room.
@@ -41,17 +42,17 @@ public class LiveKitService {
     ///   - metaData: The metadata string to be set for the room.
     /// - Returns: A `JSONResponse` object containing the response data from the request.
     /// - Throws: An error if the network request fails.
-    public func updateRoomMetadata(roomId: String, metaData: String) async throws -> JSONResponse {
-        do {
-            let response = try await network.request(url: baseUrl,
-                                                     path: "rooms/room-metadata" ,
-                                                     method: .PUT,
-                                                     body: .json([ "roomId": roomId,
-                                                                   "metadata": metaData]))
-            // Uncomment to debug: kPrint(response)
-            return response
-        } catch {
-            throw error
+    public func updateRoomMetadata(roomId: String, metaData: String) async throws -> Result<JSONResponse,NetworkError> {
+        let response =  await network.request(url: baseUrl,
+                                                 path: "rooms/room-metadata" ,
+                                                 method: .PUT,
+                                                 body: .json([ "roomId": roomId,
+                                                               "metadata": metaData]))
+        switch response {
+        case .success(let data):
+            return .success(data)
+        case .failure(let failure):
+            return .failure(failure)
         }
     }
     
@@ -61,18 +62,18 @@ public class LiveKitService {
     ///   - roomId: The ID of the room the user will join.
     /// - Returns: A `JSONResponse` object containing the response data from the request.
     /// - Throws: An error if the network request fails.
-    public func createToken(userName: String, roomId: String) async throws -> JSONResponse {
-        do {
-            let response = try await network.request(url: baseUrl,
-                                                     path: "rooms/token",
-                                                     method: .GET,
-                                                     queryParameters: ["identity": userName, "room": roomId],
-                                                     body: nil,
-                                                     headers: nil)
-            // Uncomment to debug: kPrint(response)
-            return response
-        } catch {
-            throw error
+    func createToken(userName: String, roomId: String,appKey:String) async  -> Result<JSONResponse,NetworkError> {
+        let response = await network.request(url: baseUrl,
+                                                 path: "rooms/token",
+                                                 method: .GET,
+                                                 queryParameters: ["identity": userName, "room": roomId,"appKey":appKey],
+                                                 body: nil,
+                                                 headers: nil)
+        switch response {
+        case .success(let data):
+            return .success(data)
+        case .failure(let failure):
+            return .failure(failure)
         }
     }
 }

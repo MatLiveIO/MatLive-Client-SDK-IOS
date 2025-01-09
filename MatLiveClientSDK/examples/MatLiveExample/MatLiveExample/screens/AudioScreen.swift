@@ -10,14 +10,14 @@ import Combine
 
 struct AudioScreen: View {
     let roomId: String
-    let token: String
+    let appKey: String
     let userName:String
     @StateObject private var viewModel = AudioRoomViewModel()
    
 
-    init(roomId: String, token: String,userName:String) {
+    init(roomId: String, appKey: String,userName:String) {
         self.roomId = roomId
-        self.token = token
+        self.appKey = appKey
         self.userName = userName
     }
     var body: some View {
@@ -89,14 +89,14 @@ struct AudioScreen: View {
                 }
             })
             .task {
-                await  viewModel.initializeRoom(roomId: roomId, token: token,userName: userName)
+                await  viewModel.initializeRoom(roomId: roomId,userName: userName, appKey: appKey)
             }
         }
     }
 }
 
 #Preview {
-    AudioScreen(roomId: "", token: "",userName: "")
+    AudioScreen(roomId: "", appKey: "",userName: "")
         .environmentObject(Coordinator())
 }
 

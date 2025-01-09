@@ -10,14 +10,14 @@ import MatLiveClientSDK
 
 enum Page: Identifiable ,Hashable{
     case HomeScreen
-    case AudioScreen(roomId: String, roomName: String,userName:String)
+    case AudioScreen(roomId: String, appKey: String,userName:String)
 
     var id: String {
         switch self {
         case .HomeScreen:
             return "HomeScreen"
-        case .AudioScreen(let roomId, let roomName,let userName):
-            return "AudioScreen:\(roomId):\(roomName):\(userName)"
+        case .AudioScreen(let roomId, let appKey,let userName):
+            return "AudioScreen:\(roomId):\(appKey):\(userName)"
         }
     }
 }
@@ -86,8 +86,8 @@ public class Coordinator: ObservableObject {
         switch page {
         case .HomeScreen:
             HomeScreen()
-        case .AudioScreen(let roomId, let token,let userName):
-            AudioScreen(roomId: roomId, token: token,userName: userName)
+        case .AudioScreen(let roomId, let appKey,let userName):
+            AudioScreen(roomId: roomId, appKey: appKey,userName: userName)
         }
     }
     
@@ -108,8 +108,8 @@ public class Coordinator: ObservableObject {
             NavigationStack {
               HomeScreen()
             }
-        case .AudioScreen(let roomId, let token,let userName):
-            AudioScreen(roomId: roomId, token: token,userName: userName)
+        case .AudioScreen(let roomId, let appKey,let userName):
+            AudioScreen(roomId: roomId, appKey: appKey,userName: userName)
         }
     }
     

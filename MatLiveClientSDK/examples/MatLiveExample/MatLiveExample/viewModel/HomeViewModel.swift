@@ -23,41 +23,33 @@ class HomeViewModel:ObservableObject{
     // MARK: Message
     @Published  var snackBarMessage:String = ""
     @Published var userName :String = ""
-    private let livekitService = LiveKitService()
+    var audioVm = AudioRoomViewModel()
+    private let livekitService = MatLiveService()
     
     
     func createRoom() async {
         guard !isCreateRoomLoading else {return}
         isCreateRoomLoading = true
-        do {
-            let roomResponse = try await livekitService.createRoom(roomId: Constants.roomName)
+        let response = await livekitService.createRoom(roomId: Constants.roomName)
+        
+        switch response {
+        case .success(let roomResponse):
             guard let data = roomResponse["data"] as? [String : Any] else{return}
             let sid = data["sid"] as! String
             
             isCreateRoomLoading = false
             snackBarMessage = "Room created with ID: \(sid)"
             showCreateRoomSuccess = true
-            
-        } catch  {
-            isCreateRoomLoading = false
-            snackBarMessage = "Error: \(error.localizedDescription)"
+        case .failure(let failure):
+            isJoinLoading = false
+            snackBarMessage = "Error:\(failure.message)"
             showError = true
         }
     }
     
-    func joinRoom(roomId:String,completion:@escaping (String,String,String)->Void) async {
+    func joinRoom(completion:@escaping (String,String)->Void) {
         isJoinLoading = true
-        do {
-            let tokenResponse = try await livekitService.createToken(userName: "user-\(Date.now)", roomId: Constants.roomName)
-            guard let token = tokenResponse["data"] as? String else{
-                return
-            }
-            isJoinLoading = false
-            completion(roomId,token,userName)
-        } catch  {
-            isJoinLoading = false
-            snackBarMessage = "Error:\(error.localizedDescription)"
-            showError = true
-        }
+        completion(Constants.roomName , "$2b$10$e6xwXI/OuJBS8XSMT2V.ROye2ideAywvCdLtjBSvmKttwd0DwkInW")
+        
     }
 }

@@ -29,26 +29,26 @@ struct HomeScreen: View {
                     }
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
-//                    Button(action: {
-//                        Task{
-//                            await HomeVM.createRoom()
-//                        }
-//                    }, label: {
-//                        if HomeVM.isCreateRoomLoading{
-//                            ProgressView()
-//                        }else{
-//                            Text("Create Room")
-//                                .font(.system(size: 18))
-//                        }
-//                    })
-//                    .disabled(HomeVM.isCreateRoomLoading)
-
                     Button(action: {
                         Task{
-                            await HomeVM.joinRoom(roomId: Constants.roomName, completion: { roomId, token, userName in
-                                coordinator.push(.AudioScreen(roomId: roomId, roomName: token,userName: userName))
-                            })
+                            await HomeVM.createRoom()
                         }
+                    }, label: {
+                        if HomeVM.isCreateRoomLoading{
+                            ProgressView()
+                        }else{
+                            Text("Create Room")
+                                .font(.system(size: 18))
+                        }
+                    })
+                    .disabled(HomeVM.isCreateRoomLoading)
+
+                    Button(action: {
+                        HomeVM.joinRoom { roomId, appKey in
+                            HomeVM.isJoinLoading = false
+                            coordinator.push(.AudioScreen(roomId:roomId, appKey: appKey, userName: HomeVM.userName))
+                        }
+                    
                     }, label: {
                         if HomeVM.isJoinLoading{
                             ProgressView()
@@ -57,7 +57,6 @@ struct HomeScreen: View {
                                 .font(.system(size: 18))
                         }
                     })
-                    .disabled(HomeVM.isJoinLoading)
                     
                 }
             }
