@@ -77,9 +77,9 @@ public class JoinRequest {
 }
 
 /// Manages the joining process and user participation in a live room.
-public class MatLiveJoinRoomManager: ObservableObject {
+public class MatLiveRoomManager: ObservableObject {
     /// Singleton instance for shared access.
-    nonisolated(unsafe) public static let shared = MatLiveJoinRoomManager()
+    nonisolated(unsafe) public static let shared = MatLiveRoomManager()
     /// List of participant tracks in the room.
     @Published public var participantTracks: [ParticipantTrack] = []
 
@@ -368,7 +368,7 @@ public class MatLiveJoinRoomManager: ObservableObject {
 }
 
 
-extension MatLiveJoinRoomManager:LiveRoomDelegate{
+extension MatLiveRoomManager:LiveRoomDelegate{
     
     public func room(_ room: Room, participant: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
         sortedParticipants()

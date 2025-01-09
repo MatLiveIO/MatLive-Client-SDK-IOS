@@ -14,7 +14,7 @@ import Combine
 @MainActor
 public class RoomSeatService: ObservableObject {
     @Published public var seatList: [MatLiveRoomAudioSeat] = [] // List of seats
-    @Published public var matLiveJoinRoomManager = MatLiveJoinRoomManager.shared // List of seats
+    @Published public var matLiveRoomManager = MatLiveRoomManager.shared // List of seats
     public var subscriptions:[AnyCancellable] = []
     public var hostSeatIndex:Int = 0
     var isBatchOperation:Bool = false
@@ -22,7 +22,7 @@ public class RoomSeatService: ObservableObject {
     private var liveKitService = MatLiveService()
     
     var roomId:String {
-        matLiveJoinRoomManager.roomId
+        matLiveRoomManager.roomId
     }
     private var maxIndex:Int {
         return seatList.count - 1
@@ -33,7 +33,7 @@ public class RoomSeatService: ObservableObject {
     public func initWithConfig(config:MatLiveAudioRoomLayoutConfig) async{
         layoutConfig = config
         initSeat(config: config)
-        await seatsFromMetadata(matLiveJoinRoomManager.room!.metadata)
+        await seatsFromMetadata(matLiveRoomManager.room!.metadata)
     }
     func initSeat(config: MatLiveAudioRoomLayoutConfig) {
         for (columIndex , _) in config.rowConfigs.enumerated() {
@@ -266,7 +266,7 @@ public class RoomSeatService: ObservableObject {
     // check if the user take a seat when he leave the room
     private func leaveSeatIfHave()async{
         if let seat = seatList.first(where: {
-            $0.currentUser?.userId == matLiveJoinRoomManager.currentUser?.userId
+            $0.currentUser?.userId == matLiveRoomManager.currentUser?.userId
         }) {
             seat.currentUser = nil
             await UpdateRoomMetaData()

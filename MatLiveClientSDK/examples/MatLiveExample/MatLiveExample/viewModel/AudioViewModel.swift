@@ -19,7 +19,7 @@ class AudioRoomViewModel: ObservableObject {
     @Published var snackBarMessage: String = ""
     @Published var selectedSeat: MatLiveRoomAudioSeat?
     @Published var selectedGlobalIndex: Int?
-    @Published var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
+    @Published var matliveRoomManager = MatLiveRoomManager.shared
     @Published var textMessage = ""
     
     let id = Int.random(in: 0..<10)
@@ -40,13 +40,13 @@ class AudioRoomViewModel: ObservableObject {
     
     func initializeRoom(roomId: String, userName:String,appKey:String) async {
     
-        await matliveJoinRoomManager.initialize(onInvitedToMic: { seatIndex in
+        await matliveRoomManager.initialize(onInvitedToMic: { seatIndex in
             
         }, onSendGift: { data in
             
         })
         do {
-            try await matliveJoinRoomManager.connect(
+            try await matliveRoomManager.connect(
                 name:userName,
                 appKey: appKey,
                 avatar: images[id],
@@ -54,7 +54,7 @@ class AudioRoomViewModel: ObservableObject {
                 roomId: roomId,
                 metadata: "")
             
-            let seatService = matliveJoinRoomManager.seatService
+            let seatService = matliveRoomManager.seatService
             await seatService?.initWithConfig(config:
                                             MatLiveAudioRoomLayoutConfig(
                                                 rowSpacing: 16 ,
@@ -72,19 +72,18 @@ class AudioRoomViewModel: ObservableObject {
     }
 
     func closeRoom() async {
-        await matliveJoinRoomManager.close()
+        await matliveRoomManager.close()
     }
 
     func sendMessage() async {
-//        messages.append(MatLiveChatMessage(roomId: matliveJoinRoomManager.roomId, message: textMessage, user: matliveJoinRoomManager.currentUser!))
-        try? await matliveJoinRoomManager.sendMessage(textMessage)
+        try? await matliveRoomManager.sendMessage(textMessage)
         textMessage = ""
     }
 
     // Mic controls
     func handleTakeMic(index:Int) async{
         do {
-            try await matliveJoinRoomManager.takeSeat(seatIndex: index)
+            try await matliveRoomManager.takeSeat(seatIndex: index)
             updateSuccessSnackBar(message: "Took mic at seat \(index)")
         } catch  {
             updateErrorSnackBar(message: error.localizedDescription)
@@ -93,14 +92,14 @@ class AudioRoomViewModel: ObservableObject {
     func handleMuteMic(index:Int)  async {
       
 //        guard let seatService = matliveRoomManager.seatService else {return}
-        let seat = matliveJoinRoomManager.seatService!.seatList[index]
+        let seat = matliveRoomManager.seatService!.seatList[index]
         
         do {
             if !seat.currentUser!.isMicOn{
-                try await matliveJoinRoomManager.muteSeat(seatIndex: index)
+                try await matliveRoomManager.muteSeat(seatIndex: index)
                 updateSuccessSnackBar(message: "Unmuted mic at seat \(index)")
             }else{
-                try await matliveJoinRoomManager.unmuteSeat(seatIndex: index)
+                try await matliveRoomManager.unmuteSeat(seatIndex: index)
                 updateSuccessSnackBar(message: "Muted mic at seat \(index)")
             }
            
@@ -110,7 +109,7 @@ class AudioRoomViewModel: ObservableObject {
     }
     func handleRemoveSpeaker(index:Int)  async{
         do {
-            try await matliveJoinRoomManager.removeUserFromSeat(seatIndex: index)
+            try await matliveRoomManager.removeUserFromSeat(seatIndex: index)
             updateSuccessSnackBar(message: "Removed speaker from seat \(index)")
         } catch  {
             updateErrorSnackBar(message: error.localizedDescription)
@@ -119,7 +118,7 @@ class AudioRoomViewModel: ObservableObject {
     func handleLeaveMic(index:Int)  async{
         
         do {
-            try await matliveJoinRoomManager.leaveSeat(seatIndex: index)
+            try await matliveRoomManager.leaveSeat(seatIndex: index)
             updateSuccessSnackBar(message: "Left mic at seat \(index)")
         } catch  {
             updateErrorSnackBar(message: error.localizedDescription)
@@ -127,7 +126,7 @@ class AudioRoomViewModel: ObservableObject {
     }
     func handleLockMic(index:Int)  async{
         do {
-            try await matliveJoinRoomManager.lockSeat(seatIndex: index)
+            try await matliveRoomManager.lockSeat(seatIndex: index)
             updateSuccessSnackBar(message: "Seat locked \(index)")
             
         } catch  {
@@ -136,7 +135,7 @@ class AudioRoomViewModel: ObservableObject {
     }
     func handleUnlockMic(index:Int)  async{
         do {
-            try await matliveJoinRoomManager.unlockSeat(seatIndex: index)
+            try await matliveRoomManager.unlockSeat(seatIndex: index)
             updateSuccessSnackBar(message: "Seat unlocked \(index)")
         } catch  {
             updateErrorSnackBar(message: error.localizedDescription)
@@ -144,7 +143,7 @@ class AudioRoomViewModel: ObservableObject {
     }
     func handleSwitchSeat(toIndex:Int)  async {
         do {
-            try await matliveJoinRoomManager.switchSeat(toSeatIndex: toIndex)
+            try await matliveRoomManager.switchSeat(toSeatIndex: toIndex)
             updateSuccessSnackBar(message: "Switched seat to \(toIndex)")
         } catch  {
             updateErrorSnackBar(message: error.localizedDescription)
@@ -153,7 +152,7 @@ class AudioRoomViewModel: ObservableObject {
     
     
     func calculateGlobalIndex(rowIndex: Int, seatIndex: Int) -> Int {
-        guard  let layoutConfig = matliveJoinRoomManager.seatService?.layoutConfig else{return 0}
+        guard  let layoutConfig = matliveRoomManager.seatService?.layoutConfig else{return 0}
         return (0..<rowIndex).reduce(0) { $0 + (layoutConfig.rowConfigs[$1].count) } + seatIndex
     }
 

@@ -33,14 +33,14 @@ struct SeatActionBottomSheet: View {
     private func UserSpecificActions(seat: MatLiveRoomAudioSeat) -> some View {
         List{
             
-            if !MatLiveJoinRoomManager.shared.onMic , !seat.isLocked{
+            if !MatLiveRoomManager.shared.onMic , !seat.isLocked{
                 ActionButton(
                     icon: "mic.fill",
                     label: "Take Mic",
                     action: { await onTakeMic?() }
                 )
             }
-            if MatLiveJoinRoomManager.shared.onMic , !seat.isLocked{
+            if MatLiveRoomManager.shared.onMic , !seat.isLocked{
                 ActionButton(
                     icon: "arrow.triangle.branch",
                     label: "Switch Mic",
@@ -69,7 +69,7 @@ struct SeatActionBottomSheet: View {
 
     @ViewBuilder
     private func GeneralActions() -> some View {
-        if seat.currentUser?.userId == MatLiveJoinRoomManager.shared.currentUser?.userId{
+        if seat.currentUser?.userId == MatLiveRoomManager.shared.currentUser?.userId{
             List{
                 if seat.currentUser!.isMicOn{
                     ActionButton(
@@ -84,7 +84,7 @@ struct SeatActionBottomSheet: View {
                         action: { await onMuteMic?() }
                     )
                 }
-                if seat.currentUser != nil , seat.currentUser?.userId == MatLiveJoinRoomManager.shared.currentUser?.userId{
+                if seat.currentUser != nil , seat.currentUser?.userId == MatLiveRoomManager.shared.currentUser?.userId{
                     ActionButton(
                         icon: "person.crop.circle.badge.minus",
                         label: "Remove Speaker",
@@ -95,7 +95,7 @@ struct SeatActionBottomSheet: View {
                   
                 }
                 
-                if seat.currentUser?.userId == MatLiveJoinRoomManager.shared.currentUser?.userId{
+                if seat.currentUser?.userId == MatLiveRoomManager.shared.currentUser?.userId{
                     ActionButton(
                         icon: "arrow.uturn.left",
                         label: "Leave Mic",

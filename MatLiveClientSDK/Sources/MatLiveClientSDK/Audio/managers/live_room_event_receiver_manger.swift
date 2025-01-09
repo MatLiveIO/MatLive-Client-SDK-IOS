@@ -24,7 +24,7 @@ public class LiveRoomEventReceiverManager: ObservableObject {
     @Published public var inviteRequests: [MatLiveRequestTackMic] = []
     
     /// Manager responsible for joining rooms in the MatLive system.
-    @Published public var matliveJoinRoomManager = MatLiveJoinRoomManager.shared
+    @Published public var matliveRoomManager = MatLiveRoomManager.shared
     
     // Private initializer to ensure only one instance of this manager.
     private init() {}
@@ -59,21 +59,21 @@ public class LiveRoomEventReceiverManager: ObservableObject {
             }
             
         case MatLiveEvents.removeUserFromSeat:
-            guard data["userId"] as? String == matliveJoinRoomManager.currentUser?.userId else { return }
-            try? await matliveJoinRoomManager.audioTrack?.stop()
+            guard data["userId"] as? String == matliveRoomManager.currentUser?.userId else { return }
+            try? await matliveRoomManager.audioTrack?.stop()
             do {
-                try await matliveJoinRoomManager.room?.localParticipant.setMicrophone(enabled: false)
+                try await matliveRoomManager.room?.localParticipant.setMicrophone(enabled: false)
             } catch {
                 print(error.localizedDescription)
             }
-            matliveJoinRoomManager.onMic = false
+            matliveRoomManager.onMic = false
             
         case MatLiveEvents.clearChat:
             self.messages = []
             
         case MatLiveEvents.inviteUserToTakeMic:
             guard let userid = data["userId"] as? String else { return }
-            guard matliveJoinRoomManager.currentUser?.userId == userid && onInvitedToMic != nil else { return }
+            guard matliveRoomManager.currentUser?.userId == userid && onInvitedToMic != nil else { return }
             guard let seatIndex = data["seatIndex"] as? Int else { return }
             onInvitedToMic!(seatIndex)
             
