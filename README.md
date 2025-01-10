@@ -166,4 +166,3 @@ MatLiveAudioRoomLayoutConfig(
 ## Requirements
 - iOS 16+
 - swift 
-- LiveKit iOS SDK
