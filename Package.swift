@@ -15,7 +15,7 @@ let package = Package(
     targets: [
       .binaryTarget(
         name: "MatLive-Client-SDK-IOS",
-        path: "./Sources/MatLiveClient.xcframework")
+        url: "https://github.com/anasamer1997/MyCocoapod/releases/download/v1.0.0/MatLiveClient.xcframework.zip", checksum: "813355eec7a659660b5c416bbc6f6d3b84f49ea93078ac40d3317e0ab8042080")
     ],
     swiftLanguageModes: [
         .v5,
