@@ -15,7 +15,7 @@ let package = Package(
     targets: [
       .binaryTarget(
         name: "MatLiveClientSDK",
-        path: "./Sources/MatLiveFrameWork.xcframework")
+        path: "./Sources/MatLiveClient.xcframework")
     ],
     swiftLanguageModes: [
         .v5,
