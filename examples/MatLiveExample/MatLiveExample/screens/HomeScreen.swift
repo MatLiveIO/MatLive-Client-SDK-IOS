@@ -38,19 +38,6 @@ struct HomeScreen: View {
                         .padding(.horizontal)
                     }
                     
-                    Button(action: {
-                        Task{
-                            await HomeVM.createRoom()
-                        }
-                    }, label: {
-                        if HomeVM.isCreateRoomLoading{
-                            ProgressView()
-                        }else{
-                            Text("Create Room")
-                                .font(.system(size: 18))
-                        }
-                    })
-                    .disabled(HomeVM.isCreateRoomLoading)
 
                     Button(action: {
                         HomeVM.joinRoom { roomId, appKey in
