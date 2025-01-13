@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+// MARK: MatLiveEvents contains the code for each event in room, each event has a unique code
 class MatLiveEvents {
     static let addNewSeats = 10003;
     static let removeSeats = 10004;

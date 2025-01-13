@@ -8,5 +8,7 @@
 import Foundation
 
 class Utils{
-    static let url = "https://livekit.matnsolutions.com"
+    static let url = "https://webapi.dev.ml.matnsolutions.co"
+    static let liveUrl = "https://livekit.matnsolutions.com"
+    static var appKey = "";
 }
