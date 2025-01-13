@@ -1,0 +1,340 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios16.6-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name MatLiveFrameWork
+import AVFoundation
+import Combine
+import CoreBluetooth
+import Foundation
+import PhotosUI
+import Swift
+import SwiftUI
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public class MatLiveChatMessage : Swift.Identifiable {
+  public var id: Foundation.UUID
+  public var roomId: Swift.String?
+  public var message: Swift.String
+  public var user: MatLiveFrameWork.MatLiveUser
+  public init(roomId: Swift.String?, message: Swift.String, user: MatLiveFrameWork.MatLiveUser)
+  public typealias ID = Foundation.UUID
+  @objc deinit
+}
+public class MatLiveRequestTackMic {
+  public var seatIndex: Swift.Int
+  public var user: MatLiveFrameWork.MatLiveUser
+  public init(seatIndex: Swift.Int, user: MatLiveFrameWork.MatLiveUser)
+  @objc deinit
+}
+public class MatLiveRoomAudioSeat : Foundation.ObservableObject {
+  public var seatIndex: Swift.Int
+  public var rowIndex: Swift.Int
+  public var columnIndex: Swift.Int
+  public var seatKey: ObjectiveC.NSObject
+  @Combine.Published @_projectedValueProperty($lastUser) public var lastUser: MatLiveFrameWork.MatLiveUser? {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $lastUser: Combine.Published<MatLiveFrameWork.MatLiveUser?>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($currentUser) public var currentUser: MatLiveFrameWork.MatLiveUser? {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $currentUser: Combine.Published<MatLiveFrameWork.MatLiveUser?>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($isLocked) public var isLocked: Swift.Bool {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $isLocked: Combine.Published<Swift.Bool>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  public init(seatIndex: Swift.Int, rowIndex: Swift.Int, columnIndex: Swift.Int)
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+  @objc deinit
+}
+public class MatLiveUser : Foundation.ObservableObject {
+  public var userId: Swift.String
+  public var name: Swift.String
+  public var avatar: Swift.String
+  public var roomId: Swift.String
+  public var metaData: Swift.String?
+  @Combine.Published @_projectedValueProperty($streamID) public var streamID: Swift.String? {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $streamID: Combine.Published<Swift.String?>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($viewID) public var viewID: Swift.Int {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $viewID: Combine.Published<Swift.Int>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($videoView) public var videoView: SwiftUICore.AnyView? {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $videoView: Combine.Published<SwiftUICore.AnyView?>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($isCameraOn) public var isCameraOn: Swift.Bool {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $isCameraOn: Combine.Published<Swift.Bool>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($isMicOn) public var isMicOn: Swift.Bool {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $isMicOn: Combine.Published<Swift.Bool>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($avatarUrl) public var avatarUrl: Swift.String? {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $avatarUrl: Combine.Published<Swift.String?>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  public init(userId: Swift.String, name: Swift.String, avatar: Swift.String, roomId: Swift.String, metaData: Swift.String? = nil)
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+  @objc deinit
+}
+public enum MatLiveUserRole {
+  case audience
+  case coHost
+  case host
+  public static func == (a: MatLiveFrameWork.MatLiveUserRole, b: MatLiveFrameWork.MatLiveUserRole) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class LiveRoomEventReceiverManager : Foundation.ObservableObject {
+  nonisolated(unsafe) public static let shared: MatLiveFrameWork.LiveRoomEventReceiverManager
+  @Combine.Published @_projectedValueProperty($messages) public var messages: [MatLiveFrameWork.MatLiveChatMessage] {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $messages: Combine.Published<[MatLiveFrameWork.MatLiveChatMessage]>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($inviteRequests) public var inviteRequests: [MatLiveFrameWork.MatLiveRequestTackMic] {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $inviteRequests: Combine.Published<[MatLiveFrameWork.MatLiveRequestTackMic]>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($matliveRoomManager) public var matliveRoomManager: MatLiveFrameWork.MatLiveRoomManager {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $matliveRoomManager: Combine.Published<MatLiveFrameWork.MatLiveRoomManager>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  nonisolated public func receivedData(data: [Swift.String : Any], onInvitedToMic: ((Swift.Int) -> Swift.Void)?, onSendGift: ((Swift.String) -> Swift.Void)?) async
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class LiveRoomEventSenderManager {
+  @objc deinit
+}
+public enum ParticipantTrackType {
+  case userMedia
+  case screenShare
+  public static func == (a: MatLiveFrameWork.ParticipantTrackType, b: MatLiveFrameWork.ParticipantTrackType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class ParticipantTrack {
+  @objc deinit
+}
+public class JoinRequest {
+  public var url: Swift.String
+  public var token: Swift.String
+  public var e2ee: Swift.Bool
+  public var e2eeKey: Swift.String?
+  public var simulcast: Swift.Bool
+  public var adaptiveStream: Swift.Bool
+  public var dynacast: Swift.Bool
+  public var preferredCodec: Swift.String
+  public var enableBackupVideoCodec: Swift.Bool
+  public init(url: Swift.String = "", token: Swift.String = "", e2ee: Swift.Bool = false, e2eeKey: Swift.String? = nil, simulcast: Swift.Bool = true, adaptiveStream: Swift.Bool = true, dynacast: Swift.Bool = true, preferredCodec: Swift.String = "VP8", enableBackupVideoCodec: Swift.Bool = true)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class MatLiveRoomManager : Foundation.ObservableObject {
+  nonisolated(unsafe) public static let shared: MatLiveFrameWork.MatLiveRoomManager
+  @Combine.Published @_projectedValueProperty($participantTracks) public var participantTracks: [MatLiveFrameWork.ParticipantTrack] {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  public var $participantTracks: Combine.Published<[MatLiveFrameWork.ParticipantTrack]>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  public var seatService: MatLiveFrameWork.RoomSeatService?
+  public var onMic: Swift.Bool
+  public var currentUser: MatLiveFrameWork.MatLiveUser?
+  public var roomId: Swift.String
+  public func initialize(appKey: Swift.String, onInvitedToMic: ((Swift.Int) -> Swift.Void)? = nil, onSendGift: ((Swift.String) -> Swift.Void)? = nil) async
+  public func close() async
+  public func connect(name: Swift.String, appKey: Swift.String, avatar: Swift.String, userId: Swift.String, roomId: Swift.String, metadata: Swift.String?) async throws
+  public func takeSeat(seatIndex: Swift.Int) async throws
+  public func lockSeat(seatIndex: Swift.Int) async throws
+  public func unlockSeat(seatIndex: Swift.Int) async throws
+  public func leaveSeat(seatIndex: Swift.Int) async throws
+  @_Concurrency.MainActor public func sendMessage(_ message: Swift.String) async throws
+  public func muteSeat(seatIndex: Swift.Int) async throws
+  public func unmuteSeat(seatIndex: Swift.Int) async throws
+  public func removeUserFromSeat(seatIndex: Swift.Int) async throws
+  public func switchSeat(toSeatIndex: Swift.Int) async throws
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+  @objc deinit
+}
+public class MatLiveAudioRoomLayoutConfig {
+  public var rowSpacing: Swift.Double
+  public var rowConfigs: [MatLiveFrameWork.MatLiveAudioRoomLayoutRowConfig]
+  public init(rowSpacing: CoreFoundation.CGFloat = 0, rowConfigs: [MatLiveFrameWork.MatLiveAudioRoomLayoutRowConfig]? = nil)
+  public func toString() -> Swift.String
+  @objc deinit
+}
+public class MatLiveAudioRoomLayoutRowConfig {
+  public var count: Swift.Int
+  public var seatSpacing: Swift.Int
+  public init(count: Swift.Int = 0, seatSpacing: Swift.Int = 5)
+  public func toString() -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor public class RoomSeatService : Foundation.ObservableObject {
+  @Combine.Published @_projectedValueProperty($seatList) @_Concurrency.MainActor public var seatList: [MatLiveFrameWork.MatLiveRoomAudioSeat] {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  @_Concurrency.MainActor public var $seatList: Combine.Published<[MatLiveFrameWork.MatLiveRoomAudioSeat]>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @Combine.Published @_projectedValueProperty($matLiveRoomManager) @_Concurrency.MainActor public var matLiveRoomManager: MatLiveFrameWork.MatLiveRoomManager {
+    get
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    set
+    @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    _modify
+  }
+  @_Concurrency.MainActor public var $matLiveRoomManager: Combine.Published<MatLiveFrameWork.MatLiveRoomManager>.Publisher {
+    get
+    @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
+    set
+  }
+  @_Concurrency.MainActor public var subscriptions: [Combine.AnyCancellable]
+  @_Concurrency.MainActor public var hostSeatIndex: Swift.Int
+  @_Concurrency.MainActor public var layoutConfig: MatLiveFrameWork.MatLiveAudioRoomLayoutConfig?
+  @_Concurrency.MainActor public func initWithConfig(config: MatLiveFrameWork.MatLiveAudioRoomLayoutConfig) async
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+  @objc deinit
+}
+public struct JSONResponse : @unchecked Swift.Sendable {
+  public subscript(key: Swift.String) -> Any? {
+    get
+  }
+}
+public enum NetworkError : Swift.Error {
+  case invalidResponse
+  case invalidJSON
+  case invalidURL
+  case decodingError
+  case generalError(Swift.String)
+  public var message: Swift.String {
+    get
+  }
+}
+public class MatLiveService {
+  public init()
+  public func createRoom(roomId: Swift.String) async -> Swift.Result<MatLiveFrameWork.JSONResponse, MatLiveFrameWork.NetworkError>
+  public func updateRoomMetadata(roomId: Swift.String, metaData: Swift.String) async throws -> Swift.Result<MatLiveFrameWork.JSONResponse, MatLiveFrameWork.NetworkError>
+  @objc deinit
+}
+extension MatLiveFrameWork.MatLiveUserRole : Swift.Equatable {}
+extension MatLiveFrameWork.MatLiveUserRole : Swift.Hashable {}
+extension MatLiveFrameWork.ParticipantTrackType : Swift.Equatable {}
+extension MatLiveFrameWork.ParticipantTrackType : Swift.Hashable {}
+extension MatLiveFrameWork.RoomSeatService : Swift.Sendable {}
