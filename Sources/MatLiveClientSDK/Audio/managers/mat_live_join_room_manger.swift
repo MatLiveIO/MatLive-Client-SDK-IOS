@@ -178,7 +178,6 @@ public class MatLiveRoomManager: ObservableObject {
     /// Connects to a room with the provided user details and metadata.
     public func connect(
         name: String,
-        appKey:String,
         avatar: String,
         userId: String,
         roomId: String,

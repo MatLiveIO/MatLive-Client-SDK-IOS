@@ -48,7 +48,6 @@ class AudioRoomViewModel: ObservableObject {
         do {
             try await matliveRoomManager.connect(
                 name:userName,
-                appKey: appKey,
                 avatar: images[id],
                 userId: "\(Int.random(in: 0..<1000))",
                 roomId: roomId,
