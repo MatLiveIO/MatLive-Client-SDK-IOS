@@ -12,9 +12,6 @@ let package = Package(
             name: "MatLiveClientSDK",
             targets: ["MatLiveClientSDK"]),
     ],
-    dependencies: [
-        .package(name: "LiveKit", url: "https://github.com/livekit/client-sdk-swift.git", .upToNextMajor(from: "2.0.19")),
-    ],
     targets: [
       .binaryTarget(
         name: "MatLiveClientSDK",
