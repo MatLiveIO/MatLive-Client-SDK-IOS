@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import MatLiveClient
 struct HomeScreen: View {
     
     @StateObject private var HomeVM = HomeViewModel()
@@ -24,11 +24,20 @@ struct HomeScreen: View {
                         .font(.system(size: 16))
                         .foregroundStyle(Color.gray)
                         .multilineTextAlignment(.center)
-                    HStack {
-                        TextField("Enter user name", text: $HomeVM.userName)
+                    VStack{
+                        HStack {
+                            TextField("Enter App key", text: $HomeVM.appKey)
+                        }
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.horizontal)
+                        
+                        HStack {
+                            TextField("Enter user name", text: $HomeVM.userName)
+                        }
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.horizontal)
                     }
-                    .textFieldStyle(.roundedBorder)
-                    .padding(.horizontal)
+                    
                     Button(action: {
                         Task{
                             await HomeVM.createRoom()

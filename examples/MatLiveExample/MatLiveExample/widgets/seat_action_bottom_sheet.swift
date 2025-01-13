@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import MatLiveClientSDK
+import MatLiveClient
 
 struct SeatActionBottomSheet: View {
     var seat: MatLiveRoomAudioSeat

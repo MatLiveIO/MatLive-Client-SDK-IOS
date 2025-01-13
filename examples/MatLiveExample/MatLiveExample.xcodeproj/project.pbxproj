@@ -7,11 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		395EEF202D2B9A02000F8814 /* MatLiveClientSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 395EEF1F2D2B9A02000F8814 /* MatLiveClientSDK */; };
+		393A25B22D34DCA600DCB25F /* MatLiveClient.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393A25B12D34DCA600DCB25F /* MatLiveClient.xcframework */; };
+		393A25B32D34DCA600DCB25F /* MatLiveClient.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 393A25B12D34DCA600DCB25F /* MatLiveClient.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		393A25B42D34DCA600DCB25F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				393A25B32D34DCA600DCB25F /* MatLiveClient.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		390AA1B72D2AB2D700CE29CA /* MatLiveExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MatLiveExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		393A25B12D34DCA600DCB25F /* MatLiveClient.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MatLiveClient.xcframework; path = "../../../MatLive-Client-iOS-FrameWork/MatLiveClient/build/MatLiveClient.xcframework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -27,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				395EEF202D2B9A02000F8814 /* MatLiveClientSDK in Frameworks */,
+				393A25B22D34DCA600DCB25F /* MatLiveClient.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				390AA1B92D2AB2D700CE29CA /* MatLiveExample */,
+				393A25B02D34DCA500DCB25F /* Frameworks */,
 				390AA1B82D2AB2D700CE29CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +67,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		393A25B02D34DCA500DCB25F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				393A25B12D34DCA600DCB25F /* MatLiveClient.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -60,6 +85,7 @@
 				390AA1B32D2AB2D700CE29CA /* Sources */,
 				390AA1B42D2AB2D700CE29CA /* Frameworks */,
 				390AA1B52D2AB2D700CE29CA /* Resources */,
+				393A25B42D34DCA600DCB25F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -70,7 +96,6 @@
 			);
 			name = MatLiveExample;
 			packageProductDependencies = (
-				395EEF1F2D2B9A02000F8814 /* MatLiveClientSDK */,
 			);
 			productName = MatLiveExample;
 			productReference = 390AA1B72D2AB2D700CE29CA /* MatLiveExample.app */;
@@ -101,7 +126,6 @@
 			mainGroup = 390AA1AE2D2AB2D700CE29CA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				395EEF1E2D2B9A02000F8814 /* XCLocalSwiftPackageReference "../../../MatLiveClientSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 390AA1B82D2AB2D700CE29CA /* Products */;
@@ -343,20 +367,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		395EEF1E2D2B9A02000F8814 /* XCLocalSwiftPackageReference "../../../MatLiveClientSDK" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../MatLiveClientSDK;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		395EEF1F2D2B9A02000F8814 /* MatLiveClientSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MatLiveClientSDK;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 390AA1AF2D2AB2D700CE29CA /* Project object */;
 }

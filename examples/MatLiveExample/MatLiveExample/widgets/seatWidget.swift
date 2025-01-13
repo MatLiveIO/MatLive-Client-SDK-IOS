@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import MatLiveClientSDK
+import MatLiveClient
 
 struct SeatWidget: View {
     @ObservedObject var seat: MatLiveRoomAudioSeat

@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 import SwiftUI
-import MatLiveClientSDK
+import MatLiveClient
 
 @MainActor
 class AudioRoomViewModel: ObservableObject {
@@ -40,7 +40,7 @@ class AudioRoomViewModel: ObservableObject {
     
     func initializeRoom(roomId: String, userName:String,appKey:String) async {
     
-        await matliveRoomManager.initialize(onInvitedToMic: { seatIndex in
+        await matliveRoomManager.initialize(appKey: appKey, onInvitedToMic: { seatIndex in
             
         }, onSendGift: { data in
             

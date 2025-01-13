@@ -1,5 +1,5 @@
 {
-  "originHash" : "6cf5cfa6879ffeae4a53807b17985e90e8ceb6340c7f69754b015a12afe5aae9",
+  "originHash" : "d51076c640c49f5fa26bc62aecff43003ebf1e1ac593aeefe9cb89cf14e26623",
   "pins" : [
     {
       "identity" : "client-sdk-swift",

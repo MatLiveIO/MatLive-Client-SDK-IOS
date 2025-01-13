@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MatLiveClientSDK
+import MatLiveClient
 @MainActor
 class HomeViewModel:ObservableObject{
     
@@ -23,6 +23,7 @@ class HomeViewModel:ObservableObject{
     // MARK: Message
     @Published  var snackBarMessage:String = ""
     @Published var userName :String = ""
+    @Published var appKey :String = ""
     var audioVm = AudioRoomViewModel()
     private let livekitService = MatLiveService()
     
@@ -49,7 +50,20 @@ class HomeViewModel:ObservableObject{
     
     func joinRoom(completion:@escaping (String,String)->Void) {
         isJoinLoading = true
-        completion(Constants.roomName , "$2b$10$e6xwXI/OuJBS8XSMT2V.ROye2ideAywvCdLtjBSvmKttwd0DwkInW")
+        guard !appKey.isEmpty else{
+            isJoinLoading = false
+            snackBarMessage = "Error: App key required"
+            showError = true
+            return
+        }
+        guard !userName.isEmpty else{
+            isJoinLoading = false
+            snackBarMessage = "Error: User Name required"
+            showError = true
+            return
+        }
+    
+        completion(Constants.roomName ,appKey)
         
     }
 }
